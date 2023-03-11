@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Proman.EntityFrameworkCore;
 
@@ -11,9 +12,11 @@ using Proman.EntityFrameworkCore;
 namespace Proman.Migrations
 {
     [DbContext(typeof(PromanDbContext))]
-    partial class PromanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230311154252_init_tbl_ProjectUser")]
+    partial class inittblProjectUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1611,56 +1614,6 @@ namespace Proman.Migrations
                     b.ToTable("AbpUsers");
                 });
 
-            modelBuilder.Entity("Proman.Entities.Comment", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("TaskId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TaskId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Comments");
-                });
-
             modelBuilder.Entity("Proman.Entities.Position", b =>
                 {
                     b.Property<long>("Id")
@@ -1864,155 +1817,6 @@ namespace Proman.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ReviewUsers");
-                });
-
-            modelBuilder.Entity("Proman.Entities.ReviewUserDetail", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Point")
-                        .HasColumnType("real");
-
-                    b.Property<long?>("PositionId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ProjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ReviewUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte>("UserLevel")
-                        .HasColumnType("tinyint");
-
-                    b.Property<int>("UserType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PositionId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("ReviewUserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ReviewUserDetails");
-                });
-
-            modelBuilder.Entity("Proman.Entities.Task", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float?>("OriginalEstimate")
-                        .HasColumnType("real");
-
-                    b.Property<long?>("ParentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("ProjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TaskPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float?>("TimeTrackingRemaining")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("TimeTrackingSpent")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("Proman.MultiTenancy.Tenant", b =>
@@ -2309,23 +2113,6 @@ namespace Proman.Migrations
                     b.Navigation("Position");
                 });
 
-            modelBuilder.Entity("Proman.Entities.Comment", b =>
-                {
-                    b.HasOne("Proman.Entities.Task", "Task")
-                        .WithMany()
-                        .HasForeignKey("TaskId");
-
-                    b.HasOne("Proman.Authorization.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Task");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Proman.Entities.Project", b =>
                 {
                     b.HasOne("Proman.Authorization.Users.User", "Customer")
@@ -2338,52 +2125,6 @@ namespace Proman.Migrations
                 });
 
             modelBuilder.Entity("Proman.Entities.ProjectUser", b =>
-                {
-                    b.HasOne("Proman.Entities.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
-
-                    b.HasOne("Proman.Authorization.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Proman.Entities.ReviewUserDetail", b =>
-                {
-                    b.HasOne("Proman.Entities.Position", "Position")
-                        .WithMany()
-                        .HasForeignKey("PositionId");
-
-                    b.HasOne("Proman.Entities.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
-
-                    b.HasOne("Proman.Entities.ReviewUser", "ReviewUser")
-                        .WithMany()
-                        .HasForeignKey("ReviewUserId");
-
-                    b.HasOne("Proman.Authorization.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Position");
-
-                    b.Navigation("Project");
-
-                    b.Navigation("ReviewUser");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Proman.Entities.Task", b =>
                 {
                     b.HasOne("Proman.Entities.Project", "Project")
                         .WithMany()
