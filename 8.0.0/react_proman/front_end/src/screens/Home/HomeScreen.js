@@ -1,11 +1,14 @@
-import React from "react";
+import React from 'react'
+import Dropdown from '../../components/Dropdown/Dropdown'
+import Sidebar from '../../components/Sidebar/Sidebar'
 
-function Home() {
-    return (
-      <div>
-      <h1> hello</h1>
-      </div>
-    );
-  }
-  
-  export default Home;
+const HomeScreen = () => {
+  return (
+    <div className='home'>
+       <Sidebar/>
+      
+    </div>
+  )
+}
+
+export default HomeScreen
