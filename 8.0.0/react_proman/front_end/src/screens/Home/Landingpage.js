@@ -38,6 +38,7 @@ function Landing_page() {
   ]
     return (
       <div>
+      
         <div className="mt-9 flex justify-evenly px-[100px] h-[610px] w-full">
           <div className="flex-1 ">
             <div className="flex"> 
@@ -242,6 +243,10 @@ function Landing_page() {
    </div>
 
     <Footer></Footer>
+
+
+
+    
  </div>
     );
   }
