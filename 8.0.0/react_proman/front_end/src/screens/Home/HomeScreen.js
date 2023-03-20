@@ -1,11 +1,20 @@
-import React from "react";
+import React from 'react'
+import Dropdown from '../../components/Dropdown/Dropdown'
+import Sidebar from '../../components/Sidebar/Sidebar'
 
-function Home() {
-    return (
-      <div>
-      <h1> hello</h1>
-      </div>
-    );
-  }
-  
-  export default Home;
+const HomeScreen = () => {
+  const Admin = {
+    title: 'Admin',
+    children1: ' User',
+    children2: ' Role ',
+    children3: ' Client ',
+    children4: ' Position User ',
+}
+  return (
+    <div className='home'>
+       <Sidebar/>
+    </div>
+  )
+}
+
+export default HomeScreen
