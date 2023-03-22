@@ -28,11 +28,7 @@ namespace Proman.APIs.Tasks.Dto
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string TaskPath { get; set; }
-        [ForeignKey(nameof(UserId))]
-        public virtual User User { get; set; }
         public long UserId { get; set; }
-        [ForeignKey(nameof(ProjectId))]
-        public virtual Project Project { get; set; }
         public long? ProjectId { get; set; }
     }
 }
