@@ -17,6 +17,7 @@ namespace Proman.EntityFrameworkCore
         public DbSet<Comment> Comments { get; set; }
         public DbSet<ReviewUser> ReviewUsers { get; set; }
         public DbSet<ReviewUserDetail> ReviewUserDetails { get; set; }
+        public DbSet<ProjectTargetUser> ProjectTargetUsers { get; set; }
         public PromanDbContext(DbContextOptions<PromanDbContext> options)
             : base(options)
         {

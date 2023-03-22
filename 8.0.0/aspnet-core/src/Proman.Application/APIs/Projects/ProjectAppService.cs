@@ -1,4 +1,8 @@
-﻿using Abp.Authorization.Users;
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Authorization.Users;
+using Abp.Collections.Extensions;
+using Abp.UI;
 using Castle.Core.Resource;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +11,8 @@ using Proman.APIs.Projects.Dto;
 using Proman.APIs.ReviewUsers.Dto;
 using Proman.Authorization.Roles;
 using Proman.Authorization.Users;
+using Proman.Constants.Enum;
+using Proman.DomainServices;
 using Proman.Entities;
 using Proman.Extension;
 using Proman.IIoc;
@@ -27,9 +33,17 @@ namespace Proman.APIs.Projects
         [HttpPost]
         public async Task<GridResult<GetProjectDto>> GetAllPaging(GridParam input)
         {
+            var dicUsers = WorkLimit.GetAll<User>()
+                                    .Select(s => new
+                                    {
+                                        s.Id,
+                                        s.FullName,
+                                    }).ToDictionary(s => s.Id, s => s.FullName);
+
             var query = WorkLimit.GetAll<Project>()
+                .Where(s => !s.IsDeleted)
                 .Select(s => new GetProjectDto
-                { 
+                {
                     Id = s.Id,
                     Name = s.Name,
                     Code = s.Code,
@@ -38,104 +52,16 @@ namespace Proman.APIs.Projects
                     Status = s.Status,
                     CustomerId = s.CustomerId,
                     CustomerEmailAddress = s.Customer.EmailAddress,
-                    CustomerFullName = s.Customer.FullName,
+                    CustomerFullname = s.Customer.FullName,
                     TimeStart = s.TimeStart,
                     TimeEnd = s.TimeEnd,
+                    LastModifierTime = s.LastModificationTime,
+                    CreationTime = s.CreationTime,
+                    CreatedUserName = (s.CreatorUserId.HasValue && dicUsers.ContainsKey(s.CreatorUserId.Value)) ? dicUsers[s.CreatorUserId.Value] : "",
+                    LastModifierUserName = (s.LastModifierUserId.HasValue && dicUsers.ContainsKey(s.LastModifierUserId.Value)) ? dicUsers[s.LastModifierUserId.Value] : "",
                 });
 
             return await query.GetGridResult(query, input);
-        }
-
-        [HttpPost]
-        public async Task<string> CreateProject(CreateProjectDto input)
-        {
-            var isExistName = await WorkLimit.GetAll<Project>().AnyAsync(s => s.Name == input.Name);
-            if (isExistName)
-            {
-                return string.Format("Fail! Project name <b>{0}</b> already exist in <b>PROMAN TOOL</b>", input.Name);
-            }
-
-            var isExistCode = await WorkLimit.GetAll<Project>().AnyAsync(s => s.Code == input.Code);
-            if (isExistCode)
-            {
-                return string.Format("Fail! Project code <b>{0}</b> already exist in <b>PROMAN TOOL</b>", input.Code);
-            }
-
-            if (input.TimeEnd.HasValue && input.TimeStart.Date > input.TimeEnd.Value.Date)
-            {
-                return "Fail! Start time cannot be greater than end time in <b>PROMAN TOOL</b>";
-            }
-
-            //Customer
-            var customerId = await WorkLimit.GetAll<User>()
-                    .Where(s => s.UserName == input.CustomerName)
-                    .Select(s => s.Id).FirstOrDefaultAsync();
-
-            if (customerId == default)
-            {
-                return string.Format("Fail! Not found Customer code <b>{0}</b> in <b>PROMAN TOOL</b>", input.CustomerName);
-            }
-
-            var types = new ProjectType[] { ProjectType.ODC, ProjectType.TimeAndMaterials, ProjectType.FixedFee, ProjectType.Product, ProjectType.NoneBillable, ProjectType.Training, ProjectType.NoSalary };
-            var projectType = types[input.ProjectType];
-
-            //User
-            var userByEmail = await WorkLimit.GetAll<User>()
-                   .Where(s => s.EmailAddress.ToLower() == input.EmailPM.ToLower())
-                   .Select(s => new
-                   {
-                       Id = s.Id,
-                       Type = s.Type
-                   }).FirstOrDefaultAsync();
-
-            if (userByEmail == default)
-            {
-                return string.Format("Fail! Not found PM with email <b>{0}</b> in <b>PROMAN TOOL</b>", input.EmailPM);
-            }
-
-            //insert project
-            var project = new Project
-            {
-                Name = input.Name,
-                Code = input.Code,
-                CustomerId = customerId,
-                ProjectType = projectType,
-                TimeStart = input.TimeStart,
-                TimeEnd = input.TimeEnd,
-                Status = ProjectStatus.Active
-            };
-            input.Id = await WorkLimit.InsertAndGetIdAsync<Project>(project);
-
-            //insert projectUser
-            var projectUser = new ProjectUser
-            {
-                ProjectId = input.Id,
-                UserId = userByEmail.Id,
-                Type = ProjectUserType.PM,
-                IsTemp = false
-            };
-            await WorkLimit.GetRepo<ProjectUser, long>().InsertAsync(projectUser);
-
-            return null;
-        }
-
-        [HttpPost]
-        public async Task<string> CloseProject(string code)
-        {
-            //project
-            var project = await WorkLimit.GetAll<Project>()
-                    .Where(s => s.Code == code)
-                    .FirstOrDefaultAsync();
-
-            if (project == default)
-            {
-                return string.Format("Fail! Not found project code <b>{0}</b> in <b>PROMAN TOOL</b>", code);
-            }
-
-            project.Status = ProjectStatus.Deactive;
-            await WorkLimit.UpdateAsync(project);
-
-            return null;
         }
 
         private async Task<long> GetProjectIdByCode(string code)
@@ -163,120 +89,241 @@ namespace Proman.APIs.Projects
                     .FirstOrDefaultAsync();
         }
 
+        //[HttpDelete]
+        //public async System.Threading.Tasks.Task Delete(EntityDto<long> input)
+        //{
+        //    var hasRecord = await WorkLimit.GetAll<Project>().Where(x => x.Id == input.Id).AnyAsync();
+
+        //    var IsActive = await WorkLimit.GetAll<Project>()
+        //        .Where(x => x.Id == input.Id)
+        //        .Where(x => x.Status == ProjectStatus.Active)
+        //        .AnyAsync();
+
+        //    if (!hasRecord)
+        //        throw new UserFriendlyException(string.Format("There is no entity Position with id = {0}!", input.Id));
+
+        //    else if (IsActive)
+        //        throw new UserFriendlyException(string.Format("This project is Active with id = {0}!", input.Id));
+
+        //    await WorkLimit.GetRepo<Project>().DeleteAsync(input.Id);
+        //}
+
         [HttpPost]
-        public async Task<string> UserJoinProject(UserJoinProjectDto input)
+        public async Task<ProjectDto> AddNew(ProjectDto input)
         {
-            //project
-            var projectId = await GetProjectIdByCode(input.ProjectCode);
-
-            if (projectId == default)
+            var isExistsName = await WorkLimit.GetAll<Project>().AnyAsync(s => s.Name == input.Name && s.Id != input.Id);
+            if (isExistsName)
             {
-                return string.Format("Fail! Not found project code <b>{0}</b> in <b>PROMAN TOOL</b>", input.ProjectCode);
+                throw new UserFriendlyException(string.Format("Project name:{0} is exists", input.Name));
             }
 
-            //user
-            var user = await GetUserByEmail(input.EmailAddress);
-            var basicTranerId = await GetUserIdByEmail(input.PMEmail);
+            var isExistsCode = await WorkLimit.GetAll<Project>().AnyAsync(s => s.Code == input.Code && s.Id != input.Id);
+            if (isExistsCode)
+            {
+                throw new UserFriendlyException(string.Format("Project code:{0} is exists", input.Code));
+            }
 
-            if (user == default)
+            var hasProjectAdmin = input.Users.Any(s => s.Type == ProjectUserType.PM);
+            if (!hasProjectAdmin)
             {
-                return string.Format("Fail! Not found user with email <b>{0}</b> in <b>PROMAN TOOL</b>", input.EmailAddress);
+                throw new Exception(string.Format("Project must have at least one project manager"));
             }
-            if (basicTranerId == default)
+
+            if (input.TimeEnd.HasValue && input.TimeStart.Date > input.TimeEnd.Value.Date)
             {
-                Logger.Error(string.Format("Update Basic Traner Fail! Not found user with email <b>{0}</b> in <b>PROMAN TOOL</b>", input.PMEmail));
+                throw new UserFriendlyException("Start time cannot be greater than end time !");
             }
-            else
+
+            if (input.Id <= 0)//insert 3 bang project, projectTask, projectUser
             {
-                user.ManagerId = basicTranerId;
-            }
-            var pu = await WorkLimit.GetAll<ProjectUser>()
-                .Where(s => s.UserId == user.Id)
-                .Where(s => s.ProjectId == projectId)
-                .FirstOrDefaultAsync();
-            int ProjectUserTypePM = 0;
-            if (pu == default)
-            {
-                var projectUser = new ProjectUser
+                var project = ObjectMapper.Map<Project>(input);
+                input.Id = await WorkLimit.GetRepo<Project, long>().InsertAndGetIdAsync(project);
+                CurrentUnitOfWork.SaveChanges();
+
+                //insert projectUser
+                foreach (var pUserDto in input.Users)
                 {
-                    ProjectId = projectId,
-                    UserId = user.Id,
-                    Type = input.Role == ProjectUserTypePM ? ProjectUserType.PM : ProjectUserType.Member,
-                    IsTemp = input.IsPool
-                };
-                await WorkLimit.GetRepo<ProjectUser, long>().InsertAsync(projectUser);
-            }
-            else
-            {
-                pu.IsTemp = input.IsPool;
-                if (pu.Type == ProjectUserType.DeActive)
-                {
-                    pu.Type = ProjectUserType.Member;
+                    var projectUser = new ProjectUser
+                    {
+                        ProjectId = input.Id,
+                        UserId = pUserDto.UserId,
+                        Type = pUserDto.Type,
+                        IsTemp = pUserDto.IsTemp
+                    };
+                    await WorkLimit.GetRepo<ProjectUser, long>().InsertAsync(projectUser);
                 }
-                await WorkLimit.UpdateAsync(pu);
-            }
-            CurrentUnitOfWork.SaveChanges();
 
-            return null;
+                if (input.ProjectTargetUsers != null)
+                {
+                    foreach (var pTargetUserDto in input.ProjectTargetUsers)
+                    {
+                        var projectTargetUser = new ProjectTargetUser
+                        {
+                            ProjectId = input.Id,
+                            UserId = pTargetUserDto.UserId,
+                            RoleName = pTargetUserDto.RoleName
+                        };
+                        await WorkLimit.GetRepo<ProjectTargetUser, long>().InsertAsync(projectTargetUser);
+                    }
+                }
+            }
+            return input;
         }
 
         [HttpPost]
-        public async Task<string> ChangePmOfProject(CreateProjectDto input)
+        public async Task<ProjectDto> Edit(ProjectDto input)
         {
-            //project
-            var projectId = await GetProjectIdByCode(input.Code);
-
-            if (projectId == default)
+            if (input.Id > 0) //edit
             {
-                return string.Format("Fail! Not found project code <b>{0}</b> in <b>TIMESHEET TOOL</b>", input.Code);
-            }
+                var project = await WorkLimit.GetAsync<Project>(input.Id);
+                ObjectMapper.Map<ProjectDto, Project>(input, project);
+                await WorkLimit.GetRepo<Project, long>().UpdateAsync(project);
 
+                //ProjectUser
+                var currentProjectUsers = await WorkLimit.GetAll<ProjectUser>()
+                    .Where(s => s.ProjectId == input.Id).ToListAsync();
 
-            if (string.IsNullOrEmpty(input.EmailPM))
-            {
-                return "Fail! Email are not allowed to be empty <b>{0}</b> in <b>TIMESHEET TOOL</b>";
-            }
-            //insert projectUser
-            var userId = await GetUserIdByEmail(input.EmailPM);
+                var currentUserIds = currentProjectUsers.Select(s => s.UserId).ToList();
 
-            if (userId == default)
-            {
-                return string.Format("Fail! Not found PM with email <b>{0}</b> in <b>TIMESHEET TOOL</b>", input.EmailPM);
-            }
+                var newUserIds = input.Users.Select(s => s.UserId).ToList();
 
-            var userInProject = await WorkLimit.GetAll<ProjectUser>()
-                .Where(s => s.UserId == userId)
-                .Where(s => s.ProjectId == projectId)
-                .FirstOrDefaultAsync();
+                var insertUsers = input.Users.Where(x => !currentUserIds.Contains(x.UserId));
 
-            if (userInProject == default)
-            {
-                var projectUser = new ProjectUser
+                var deleteProjectUserIds = currentProjectUsers
+                    .Where(s => !newUserIds.Contains(s.UserId))
+                    .Select(s => s.Id).ToList();
+
+                var updateUsers = (from cpu in currentProjectUsers
+                                   join cu in input.Users on cpu.UserId equals cu.UserId
+                                   select new
+                                   {
+                                       ProjectUser = cpu,
+                                       Dto = cu
+                                   }).ToList();
+
+                foreach (var id in deleteProjectUserIds)
                 {
-                    ProjectId = projectId,
-                    UserId = userId,
-                    Type = ProjectUserType.PM
-                };
-                await WorkLimit.GetRepo<ProjectUser, long>().InsertAsync(projectUser);
+                    await WorkLimit.DeleteAsync<ProjectUser>(id);
+                }
+
+                foreach (var pUserDto in insertUsers)
+                {
+                    var projectUser = ObjectMapper.Map<ProjectUser>(pUserDto);
+                    projectUser.ProjectId = input.Id;
+                    await WorkLimit.InsertAsync<ProjectUser>(projectUser);
+                }
+
+                foreach (var item in updateUsers)
+                {
+                    if (item.Dto.Type != item.ProjectUser.Type || item.Dto.IsTemp != item.ProjectUser.IsTemp)
+                    {
+                        item.ProjectUser.Type = item.Dto.Type;
+                        item.ProjectUser.IsTemp = item.Dto.IsTemp;
+
+                        await WorkLimit.UpdateAsync<ProjectUser>(item.ProjectUser);
+                    }
+                }
+
+                //ProjectTargetUser
+
+                var currentProjectTargetUsers = await WorkLimit.GetAll<ProjectTargetUser>()
+               .Where(s => s.ProjectId == input.Id).ToListAsync();
+
+                var currentTargetUserIds = currentProjectTargetUsers.Select(s => s.UserId).ToList();
+
+                var newTargetUserIds = input.ProjectTargetUsers.Select(s => s.UserId).ToList();
+
+                var deleteTargetUserIds = currentTargetUserIds.Except(newTargetUserIds);
+
+                var insertProjectTargetUsers = input.ProjectTargetUsers.Where(x => !currentTargetUserIds.Contains(x.UserId));
+
+                var deleteProjectTargetUserIds = currentProjectTargetUsers
+                    .Where(s => !newTargetUserIds.Contains(s.UserId)).Select(s => s.Id).ToList();
+
+                var updateProjectTargetUsers = (from cpu in currentProjectTargetUsers
+                                                join cu in input.ProjectTargetUsers on cpu.UserId equals cu.UserId
+                                                select new
+                                                {
+                                                    ProjectTargetUser = cpu,
+                                                    Dto = cu
+                                                }).ToList();
+
+                foreach (var id in deleteProjectTargetUserIds)
+                {
+                    await WorkLimit.DeleteAsync<ProjectTargetUser>(id);
+                }
+
+                foreach (var pTargetUserDto in insertProjectTargetUsers)
+                {
+                    var projectTargetUser = ObjectMapper.Map<ProjectTargetUser>(pTargetUserDto);
+                    projectTargetUser.ProjectId = input.Id;
+                    await WorkLimit.InsertAsync<ProjectTargetUser>(projectTargetUser);
+                }
+
+                foreach (var item in updateProjectTargetUsers)
+                {
+                    if (item.Dto.RoleName != item.ProjectTargetUser.RoleName)
+                    {
+                        item.ProjectTargetUser.RoleName = item.Dto.RoleName;
+                        await WorkLimit.UpdateAsync<ProjectTargetUser>(item.ProjectTargetUser);
+                    }
+                }
             }
-            else
+            return input;
+        }
+
+        private async Task<Project> GetProjectById(long projectId)
+        {
+            return await WorkLimit.GetAsync<Project>(projectId);
+        }
+
+        [HttpPut]
+        public async System.Threading.Tasks.Task ChangeStatus(EntityDto<long> input)
+        {
+            var project = await GetProjectById(input.Id);
+            var status = ProjectStatus.Active;
+            if (project.Status == status)
             {
-                userInProject.Type = ProjectUserType.PM;
-                await WorkLimit.UpdateAsync(userInProject);
+                status = ProjectStatus.Deactive;
+                project.Status = status;
             }
 
-            //var userHasRole = _userServices.UserHasRole(userId, StaticRoleNames.Host.ProjectAdmin);
-            //if (!userHasRole)
-            //{
-            //    var roleId = _roleManager.GetRoleByNameAsync(StaticRoleNames.Host.ProjectAdmin).Result.Id;
-            //    WorkLimit.Insert<UserRole>(new UserRole
-            //    {
-            //        RoleId = roleId,
-            //        UserId = userId
-            //    });
-            //}
+            project.Status = status;
 
-            return null;
+            await WorkLimit.UpdateAsync<Project>(project);
+        }
+
+        [HttpGet]
+        public async Task<List<GetUserByProjectIdDto>> GetUserByProjectId(EntityDto<long> input)
+        {
+            return await WorkLimit.GetAll<ProjectUser>()
+                .Where(s => s.ProjectId == input.Id)
+                .Select(s => new GetUserByProjectIdDto
+                {
+                    UserId = s.UserId,
+                    FullName = s.User.FullName,
+                    EmailAddress = s.User.EmailAddress,
+                    Type = s.Type,
+                }).ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<List<GetTaskByProjectIdDto>> GetTaskByProjectId(EntityDto<long> input)
+        {
+            return await WorkLimit.GetAll<Entities.Task>()
+                .Where(s => s.ProjectId == input.Id)
+                .Select(s => new GetTaskByProjectIdDto
+                {
+                    Title = s.Title,
+                    Name = s.Name,
+                    Description = s.Description,
+                    Type = s.Type,
+                    Status = s.Status,
+                    Priority = s.Priority,
+                    UserId = s.UserId,
+                    FullName = s.User.FullName,
+                    EmailAddress = s.User.EmailAddress,
+                }).ToListAsync();
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Proman.EntityFrameworkCore;
 
@@ -11,9 +12,11 @@ using Proman.EntityFrameworkCore;
 namespace Proman.Migrations
 {
     [DbContext(typeof(PromanDbContext))]
-    partial class PromanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230320155556_add_tbl_ProjectTargetUser")]
+    partial class addtblProjectTargetUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
