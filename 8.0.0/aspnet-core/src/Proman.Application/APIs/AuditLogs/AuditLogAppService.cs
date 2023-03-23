@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 namespace Proman.APIs.AuditLogs
 {
     public class AuditLogAppService : PromanAppServiceBase
+
     {
         public AuditLogAppService(IWorkLimit workLimit) : base(workLimit)
         { }
