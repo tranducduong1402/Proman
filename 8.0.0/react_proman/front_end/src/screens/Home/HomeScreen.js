@@ -1,6 +1,8 @@
 import React from 'react'
 import Dropdown from '../../components/Dropdown/Dropdown'
+import Header from '../../components/Header/Header'
 import Sidebar from '../../components/Sidebar/Sidebar'
+import UserScreen from '../User/UserScreen'
 
 const HomeScreen = () => {
   const Admin = {
@@ -13,6 +15,7 @@ const HomeScreen = () => {
   return (
     <div className='home'>
        <Sidebar/>
+    
     </div>
   )
 }
