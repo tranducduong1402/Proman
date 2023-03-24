@@ -5,6 +5,8 @@ import logo from "../../data/image/logo_proman.png";
 import rollback from "../../data/image/roll_back.png";
 import UserScreen from "../../screens/User/UserScreen";
 import Dropdown from "../Dropdown/Dropdown";
+import Header from "../Header/Header";
+
 
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
@@ -51,7 +53,7 @@ const Sidebar = () => {
             }`}
           />
           <h1
-            className={`text-main_color origin-left font-medium text-xl duration-200  text-[35px] ${
+            className={`text-main_color origin-left duration-200  text-4xl font-bold ${
               !open && "scale-0"
             }`}
           >
@@ -59,7 +61,10 @@ const Sidebar = () => {
           </h1>
         </div>
 
-        <div className=" text-[#BDBDBD] mt-6"> Main Menu </div>
+        <div 
+        className=  { `${!open && "hidden"} origin-left duration-200 mt-9 `}>
+         Main Menu 
+        </div>
         <ul className="pt-4">
           {Menus.map((Menu, index) => (
             <li
@@ -84,9 +89,10 @@ const Sidebar = () => {
           >
             <i class="fa-solid fa-user text-[#BDBDBD]  mx-2 text-[13px] my-auto "></i>
             <li
-              className={`${
-                !open && "hidden"
-              } origin-left duration-200 text-[#BDBDBD] text-[18px] flex font-normal ml-4`}
+              className={
+                `${
+                !open && "hidden"} origin-left duration-200 text-[#BDBDBD] text-[18px] flex font-normal ml-4
+                `}
             >
               <button>
                 Admin
@@ -161,11 +167,8 @@ const Sidebar = () => {
         </li>
         </ul>
       </div>
-      <div className="h-screen flex-1 p-7 bg-[#EEEFF3]">
-        <h1 className="text-2xl font-semibold ">Home Page</h1>
-        <UserScreen/>
-        
-    </div>
+
+   
       
     </div>
   );

@@ -5,6 +5,7 @@ import LoginScreen from './screens/Login/LoginScreen';
 import SignUpScreen from './screens/SignUp/SignupScreen';
 import HomeScreen from './screens/Home/HomeScreen';
 import ResetPassword from './screens/SignUp/ResetScreen';
+import UserScreen from './screens/User/UserScreen';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,11 @@ const router = createBrowserRouter([
   {
     path: "/resetpassword",
     element: <ResetPassword />,
+  },
+
+  {
+    path: "/user",
+    element: <UserScreen />,
   },
 ]);
 

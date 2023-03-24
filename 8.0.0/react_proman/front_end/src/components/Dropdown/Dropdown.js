@@ -4,9 +4,7 @@ import { Link } from 'react-router-dom'
 const Dropdown = ( { data }) => {
   return (
     <div>
-    
-
-<div className={`${ data.status && "hidden" }  text-black  ${ !data.statusNav && "hidden" }` }>
+    <div className={`${ data.status && "hidden" }  text-black  ${ !data.statusNav && "hidden" }` }>
 
     <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 align-middle">
       <li >    
@@ -38,7 +36,7 @@ const Dropdown = ( { data }) => {
       </Link> 
       </li>
     </ul>
-</div>
+   </div>
 
     </div>
   )
