@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Proman.Authorization.Users;
+using Proman.DomainServices.Dto;
 
 namespace Proman.Users.Dto
 {
