@@ -41,11 +41,11 @@ namespace Proman.Authorization.Users
         {
             CheckForTenant();
 
-            var tenant = await GetActiveTenantAsync();
+            //var tenant = await GetActiveTenantAsync();
 
             var user = new User
             {
-                TenantId = tenant.Id,
+                TenantId = null,
                 Name = name,
                 Surname = surname,
                 EmailAddress = emailAddress,
@@ -59,10 +59,10 @@ namespace Proman.Authorization.Users
            
             foreach (var defaultRole in await _roleManager.Roles.Where(r => r.IsDefault).ToListAsync())
             {
-                user.Roles.Add(new UserRole(tenant.Id, user.Id, defaultRole.Id));
+                user.Roles.Add(new UserRole(null, user.Id, defaultRole.Id));
             }
 
-            await _userManager.InitializeOptionsAsync(tenant.Id);
+            await _userManager.InitializeOptionsAsync(null);
 
             CheckErrors(await _userManager.CreateAsync(user, plainPassword));
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -70,12 +70,14 @@ namespace Proman.Authorization.Users
             return user;
         }
 
-        private void CheckForTenant()
+        private bool CheckForTenant()
         {
             if (!AbpSession.TenantId.HasValue)
             {
-                throw new InvalidOperationException("Can not register host users!");
+                return false;
             }
+
+            return true;
         }
 
         private async Task<Tenant> GetActiveTenantAsync()
