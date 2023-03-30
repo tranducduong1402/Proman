@@ -28,5 +28,6 @@ namespace Proman.Users.Dto
         public string LastModifierUserName { get; set; }
         public DateTime CreationTime { get; set; }
         public DateTime? LastModifierTime { get; set; }
+        public Sex? Sex { get; set; }
     }
 }
