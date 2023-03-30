@@ -313,6 +313,7 @@ namespace Proman.Users
                     CreationTime = s.CreationTime,
                     CreatedUserName = (s.CreatorUserId.HasValue && dicUsers.ContainsKey(s.CreatorUserId.Value)) ? dicUsers[s.CreatorUserId.Value] : "",
                     LastModifierUserName = (s.LastModifierUserId.HasValue && dicUsers.ContainsKey(s.LastModifierUserId.Value)) ? dicUsers[s.LastModifierUserId.Value] : "",
+                    Sex = s.Sex,
                 }).ToListAsync();
         }
 
