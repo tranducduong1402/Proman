@@ -6,6 +6,8 @@ import SignUpScreen from './screens/SignUp/SignupScreen';
 import HomeScreen from './screens/Home/HomeScreen';
 import ResetPassword from './screens/SignUp/ResetScreen';
 import UserScreen from './screens/User/UserScreen';
+import RoleScreen from './screens/Role/RoleScreen';
+import ClientScreen from './screens/Client/ClientScreen';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +35,16 @@ const router = createBrowserRouter([
   {
     path: "/user",
     element: <UserScreen />,
+  },
+
+  {
+    path: "/role",
+    element: <RoleScreen />,
+  },
+
+  {
+    path: "/client",
+    element: <ClientScreen/>,
   },
 ]);
 
