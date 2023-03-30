@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
+import { Breadcrumb } from "../../components/Breadcrumb/Breadcrumb";
 import DropMenu from "../../components/Dropdown/DropMenu";
 import Header from "../../components/Header/Header";
 import Navbar from "../../components/Navbar/Navbar";
 import Pagination from "../../components/Pagination/Pagination";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import avatar from "../../data/image/avatar.jpg";
-const UserScreen = () => {
+const ClientScreen = () => {
   const data = [
     {
       id: 1,
@@ -45,6 +46,8 @@ const UserScreen = () => {
     <div className="flex">
       <Sidebar />
       <div className="h-screen flex-1 p-7 bg-[#EEEFF3]">
+      <Breadcrumb pagename1= "Admin" pagename2= "Client"/>
+
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <Header />
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -66,29 +69,19 @@ const UserScreen = () => {
                   STT
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  User
+                  Client
                 </th>
-                <th scope="col" className="px-6 py-3">
-                  Position
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Type
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Project
-                </th>
-
                 <th scope="col" className="px-6 py-3">
                   Sex
                 </th>
-
                 <th scope="col" className="px-6 py-3">
-                  Roles
+                  Age
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Number Project
                 </th>
 
-                <th scope="col" className="px-6 py-3">
-                  IsActive
-                </th>
+                
 
                 <th scope="col" className="px-6 py-3">
                   Action
@@ -134,20 +127,12 @@ const UserScreen = () => {
                       </div>
                     </div>
                   </th>
-                  <td className="px-6 py-4">Dev</td>
-
-                  <td className="px-6 py-4">Staff</td>
-
-                  <td className="px-6 py-4">Proman</td>
-
                   <td className="px-6 py-4">Male</td>
-                  <td className="px-6 py-4">Basic User</td>
-                  <td className="px-6 py-8">
-                    <div className="flex items-center bg-[#0D9488] rounded-2xl w-[20px] h-[20px]">
-                      <i className="fa-solid fa-check text-white rounded-xl w-[20px] h-[20px] text-center mt-1"></i>
-                    </div>
-                  </td>
-                  <td className="px-6 py-8">
+
+                  <td className="px-6 py-4">24</td>
+                  <td className="px-6 py-4">4</td>
+                  
+                  <td className="px-10 py-8">
                     <DropMenu options={options} />
                   </td>
                 </tr>
@@ -161,4 +146,4 @@ const UserScreen = () => {
   );
 };
 
-export default UserScreen;
+export default ClientScreen;
