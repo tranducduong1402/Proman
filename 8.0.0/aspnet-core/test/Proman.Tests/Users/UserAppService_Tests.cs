@@ -5,6 +5,7 @@ using Xunit;
 using Abp.Application.Services.Dto;
 using Proman.Users;
 using Proman.Users.Dto;
+using Proman.DomainServices.Dto;
 
 namespace Proman.Tests.Users
 {

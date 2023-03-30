@@ -31,8 +31,8 @@ namespace Proman.Authorization.Accounts.Dto
         [DisableAuditing]
         public string Password { get; set; }
 
-        [DisableAuditing]
-        public string CaptchaResponse { get; set; }
+        //[DisableAuditing]
+        //public string CaptchaResponse { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

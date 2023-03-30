@@ -1,8 +1,11 @@
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using Proman.DomainServices.Dto;
+using Proman.Paging;
 using Proman.Roles.Dto;
 using Proman.Users.Dto;
+using CreateUserDto = Proman.DomainServices.Dto.CreateUserDto;
 
 namespace Proman.Users
 {
