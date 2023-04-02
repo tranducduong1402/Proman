@@ -18,8 +18,8 @@ namespace Proman.Users.Dto
         public UserType? Type { get; set; }
         public UserLevel? Level { get; set; }
         public string UserCode { get; set; }
-        public string AvatarPath { get; set; }
-        public string AvatarFullPath => FileUtils.FullFilePath(AvatarPath);
+        //public string AvatarPath { get; set; }
+        //public string AvatarFullPath => FileUtils.FullFilePath(AvatarPath);
         public long? PositionId { get; set; }
         public string PositionName { get; set; }
         public DateTime UpdatedAt => LastModifierTime.HasValue ? LastModifierTime.Value : CreationTime;

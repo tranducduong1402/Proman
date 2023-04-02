@@ -154,5 +154,32 @@ namespace Proman.APIs.Tasks
 
             await WorkLimit.UpdateAsync<Entities.Task>(task);
         }
+
+        [HttpGet]
+        public async Task<List<Dto.GetProjectCreateTaskDto>> GetAllProject()
+        {
+            return await WorkLimit.GetAll<Project>()
+                .Where(s => s.Status != StatusEnum.ProjectStatus.Deactive)
+                .Where(s => !s.IsDeleted)
+                .Select(s => new Dto.GetProjectCreateTaskDto
+                {
+                    ProjectId = s.Id,
+                    Name = s.Name,
+                }).ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<List<GetClientDto>> GetAllUserByProjectId(long projectId)
+        {
+            return await WorkLimit.GetAll<ProjectUser>()
+                .Where(s => s.ProjectId == projectId)
+                .Select(s => new GetClientDto
+                {
+                    ClientId = s.UserId,
+                    EmailAddress = s.User.EmailAddress,
+                    FullName = s.User.FullName,
+                    UserName = s.User.UserName,
+                }).ToListAsync();
+        }
     }
 }

@@ -20,10 +20,6 @@ namespace Proman.APIs.Projects.Dto
         public ProjectStatus Status { get; set; }
         public string Code { get; set; }
         public ProjectType ProjectType { get; set; }
-        public string Note { get; set; }
-        public long CustomerId { get; set; }
-        public string CustomerFullname { get; set; }
-        public string CustomerEmailAddress { get; set; }
         public DateTime UpdatedAt => LastModifierTime.HasValue ? LastModifierTime.Value : CreationTime;
         public string UpdatedName => String.IsNullOrEmpty(LastModifierUserName) ? CreatedUserName : LastModifierUserName;
         public string CreatedUserName { get; set; }
