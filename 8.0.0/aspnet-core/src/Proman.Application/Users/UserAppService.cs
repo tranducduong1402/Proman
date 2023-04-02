@@ -306,7 +306,7 @@ namespace Proman.Users
                     Type = s.Type,
                     UserCode = s.UserCode,
                     Level = s.Level,
-                    AvatarPath = s.AvatarPath != null ? s.AvatarPath : "",
+                    //AvatarPath = s.AvatarPath != null ? s.AvatarPath : "",
                     PositionId = s.Position.Id,
                     PositionName = s.Position.Name,
                     LastModifierTime = s.LastModificationTime,
