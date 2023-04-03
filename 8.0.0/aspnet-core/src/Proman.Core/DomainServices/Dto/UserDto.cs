@@ -36,7 +36,6 @@ namespace Proman.DomainServices.Dto
         [ApplySearchAttribute]
         [MaxLength(256)]
         public string UserCode { get; set; }
-        public string JobTitle { get; set; }
         public UserLevel? Level { get; set; }
         public long? ManagerId { get; set; }
         public Sex? Sex { get; set; }
