@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Abp.Application.Services;
+﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
+using Abp.Authorization.Users;
 using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
@@ -14,24 +10,22 @@ using Abp.Linq.Extensions;
 using Abp.Localization;
 using Abp.Runtime.Session;
 using Abp.UI;
-using Proman.Authorization;
-using Proman.Authorization.Accounts;
-using Proman.Authorization.Roles;
-using Proman.Authorization.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Proman.Authorization;
+using Proman.Authorization.Roles;
+using Proman.Authorization.Users;
 using Proman.DomainServices.Dto;
+using Proman.Extension;
+using Proman.IIoc;
+using Proman.Paging;
 using Proman.Roles.Dto;
 using Proman.Users.Dto;
-using Abp.Authorization.Users;
-using Proman.Entities;
-using Proman.Paging;
-using static Proman.Constants.Enum.StatusEnum;
-using Proman.IIoc;
-using Proman.Extension;
-using Castle.Core.Internal;
-using Proman.APIs.Positions.Dto;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Proman.Users
 {
@@ -327,76 +321,75 @@ namespace Proman.Users
                                  RoleName = r.Name
                              };
 
-            var qprojectUsers = from pu in _workLimit.GetAll<ProjectUser>().Where(s => s.User.IsActive == true)
-                                join p in _workLimit.GetAll<Project>().Where(s => s.Status == ProjectStatus.Active) on pu.ProjectId equals p.Id
-                                where pu.Type != ProjectUserType.DeActive
-                                select new
-                                {
-                                    pu.ProjectId,
-                                    p.Code,
-                                    p.Name,
-                                    pu.UserId,
-                                    pu.Type
-                                };
+            //var qprojectUsers = from pu in _workLimit.GetAll<ProjectUser>().Where(s => s.User.IsActive == true)
+            //                    join p in _workLimit.GetAll<Project>().Where(s => s.Status == ProjectStatus.Active) on pu.ProjectId equals p.Id
+            //                    where pu.Type != ProjectUserType.DeActive
+            //                    select new
+            //                    {
+            //                        pu.ProjectId,
+            //                        p.Code,
+            //                        p.Name,
+            //                        pu.UserId,
+            //                        pu.Type
+            //                    };
 
 
             var query = from u in _workLimit.GetAll<User>()
-                        join pu in qprojectUsers on u.Id equals pu.UserId into pusers
+                        //join pu in qprojectUsers on u.Id equals pu.UserId into pusers
                         join ur in qUserRoles on u.Id equals ur.UserId into roles
-                        join mu in _workLimit.GetAll<User>() on u.ManagerId equals mu.Id into muu
+                        //join mu in _workLimit.GetAll<User>() on u.ManagerId equals mu.Id into muu
                         select new GetAllUserDto
                         {
                             Id = u.Id,
                             UserName = u.UserName,
-                            Name = u.Name,
-                            Surname = u.Surname,
                             FullName = u.FullName,
-                            Address = u.Address,
                             IsActive = u.IsActive,
                             EmailAddress = u.EmailAddress,
-                            RoleNames = roles.Select(s => s.RoleName).ToArray(),
-                            ProjectUsers = pusers.Select(s => new PUDto
-                            {
-                                ProjectId = s.ProjectId,
-                                ProjectName = s.Name,
-                                ProjectCode = s.Code,
-                                ProjectUserType = s.Type
-                            }).ToList(),
+                            RoleId = _workLimit.GetAll<UserRole>().Where(s => s.UserId == u.Id).Select(s => s.RoleId).ToList(),
+                            RoleNames = _workLimit.GetAll<Role, int>()
+                            .Where(s => _workLimit.GetAll<UserRole>().Where(s => s.UserId == u.Id).Select(s => s.RoleId).ToList()
+                            .Contains(s.Id)).Select(s => s.Name).ToList(),
+                            //ProjectUsers = pusers.Select(s => new PUDto
+                            //{
+                            //    ProjectId = s.ProjectId,
+                            //    ProjectName = s.Name,
+                            //    ProjectCode = s.Code,
+                            //    ProjectUserType = s.Type
+                            //}).ToList(),
                             Type = u.Type,
                             Level = u.Level,
-                            StartDateAt = u.StartDateAt,
                             UserCode = u.UserCode,
-                            AvatarPath = u.AvatarPath,
-                            ManagerId = u.ManagerId,
+                            //AvatarPath = u.AvatarPath,
+                            //ManagerId = u.ManagerId,
                             Sex = u.Sex,
                             CreationTime = u.CreationTime,
-                            ManagerName = muu.FirstOrDefault() != null ? muu.FirstOrDefault().FullName : "",
-                            ManagerAvatarPath = muu.FirstOrDefault() != null ? muu.FirstOrDefault().AvatarPath : "",
+                            //ManagerName = muu.FirstOrDefault() != null ? muu.FirstOrDefault().FullName : "",
+                            //ManagerAvatarPath = muu.FirstOrDefault() != null ? muu.FirstOrDefault().AvatarPath : "",
                             PositionId = u.Position.Id,
                             PositionName = u.Position.Name
                         };
             query = query.OrderByDescending(s => s.CreationTime);
             var temp = await query.GetGridResult(query, input);
 
-            var projectIds = new HashSet<long?>();
-            foreach (var user in temp.Items)
-            {
-                projectIds.UnionWith(user.ProjectUsers.Select(s => s.ProjectId));
-            }
+            //var projectIds = new HashSet<long?>();
+            //foreach (var user in temp.Items)
+            //{
+            //    projectIds.UnionWith(user.ProjectUsers.Select(s => s.ProjectId));
+            //}
 
-            var projects = (_workLimit.GetAll<ProjectUser>()
-                    .Where(s => projectIds.Contains(s.ProjectId) && s.Type == ProjectUserType.PM)
-                    .Select(s => new { s.ProjectId, s.User.FullName })
-                    .GroupBy(s => s.ProjectId))
-                    .Select(s => new { s.Key, pms = s.Select(f => f.FullName).ToList() }).ToList();
+            //var projects = (_workLimit.GetAll<ProjectUser>()
+            //        .Where(s => projectIds.Contains(s.ProjectId) && s.Type == ProjectUserType.PM)
+            //        .Select(s => new { s.ProjectId, s.User.FullName })
+            //        .GroupBy(s => s.ProjectId))
+            //        .Select(s => new { s.Key, pms = s.Select(f => f.FullName).ToList() }).ToList();
 
-            foreach (var user in temp.Items)
-            {
-                foreach (var pu in user.ProjectUsers)
-                {
-                    pu.Pms = projects.Where(s => s.Key == pu.ProjectId).Select(s => s.pms).FirstOrDefault();
-                }
-            }
+            //foreach (var user in temp.Items)
+            //{
+            //    foreach (var pu in user.ProjectUsers)
+            //    {
+            //        pu.Pms = projects.Where(s => s.Key == pu.ProjectId).Select(s => s.pms).FirstOrDefault();
+            //    }
+            //}
             return new PagedResultDto<GetAllUserDto>(temp.TotalCount, temp.Items);
         }
 
