@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.UI;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Proman.APIs.Comments.Dto;
@@ -10,18 +11,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using System.IO;
 
 namespace Proman.APIs.Comments
 {
     public class CommentAppService : PromanAppServiceBase
     {
-        public CommentAppService(IWorkLimit workLimit) : base(workLimit) { }
+        private readonly Cloudinary _cloudinary;
+        public CommentAppService(IWorkLimit workLimit, Cloudinary cloudinary) : base(workLimit) 
+        {
+            _cloudinary = cloudinary;
+        }
 
         [HttpPost]
-        public async Task<CommentCreateEditDto> Create(CommentCreateEditDto input)
+        public async Task<CommentCreateEditDto> Create(CommentCreateEditDto input, IFormFile inputfile)
         {
             var userId = AbpSession.UserId.Value;
             var item = ObjectMapper.Map<Comment>(input);
+            item.ImagePath = await UploadImageComment(input.FormFile);
             item.UserId = userId;
             await WorkLimit.InsertAsync(item);
 
@@ -96,6 +105,20 @@ namespace Proman.APIs.Comments
                     UserId = s.UserId,
                     UserName = s.User.UserName,
                 }).ToListAsync();
+        }
+
+        [HttpPost]
+        public async Task<string> UploadImageComment(IFormFile file)
+        {
+            var uploadParams = new ImageUploadParams
+            {
+                File = new FileDescription(file.FileName, file.OpenReadStream()),
+                PublicId = "my_folder/" + file.FileName
+            };
+
+            var t =await _cloudinary.UploadAsync(uploadParams);
+            return Path.GetFileName(new Uri(t.Url.ToString()).AbsolutePath);
+
         }
     }
 }
