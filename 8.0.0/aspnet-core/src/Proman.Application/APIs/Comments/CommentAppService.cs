@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using System.IO;
+using static System.Net.WebRequestMethods;
 
 namespace Proman.APIs.Comments
 {
@@ -26,7 +27,7 @@ namespace Proman.APIs.Comments
         }
 
         [HttpPost]
-        public async Task<CommentCreateEditDto> Create(CommentCreateEditDto input, IFormFile inputfile)
+        public async Task<CommentCreateEditDto> Create([FromForm] CommentCreateEditDto input)
         {
             var userId = AbpSession.UserId.Value;
             var item = ObjectMapper.Map<Comment>(input);
@@ -107,13 +108,12 @@ namespace Proman.APIs.Comments
                 }).ToListAsync();
         }
 
-        [HttpPost]
-        public async Task<string> UploadImageComment(IFormFile file)
+        private async Task<string> UploadImageComment(IFormFile file)
         {
             var uploadParams = new ImageUploadParams
             {
                 File = new FileDescription(file.FileName, file.OpenReadStream()),
-                PublicId = "my_folder/" + file.FileName
+                PublicId = "comment/" + file.FileName
             };
 
             var t =await _cloudinary.UploadAsync(uploadParams);

@@ -11,5 +11,7 @@ namespace Proman.Constants
         public string CloudName { get; set; }
         public string ApiKey { get; set; }
         public string ApiSecret { get; set; }
+        public string UrlComment { get; set; }
+        public string UrlAvatar { get; set; }
     }
 }
