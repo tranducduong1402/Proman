@@ -95,7 +95,7 @@ namespace Proman.Web.Host.Startup
             var cloudinary = new Cloudinary(new Account(
                 cloudinaryAccount.CloudName,
                 cloudinaryAccount.ApiKey,
-                cloudinaryAccount.ApiSecret
+                cloudinaryAccount.ApiSecret       
             ));
             services.AddSingleton(cloudinary);
         }
