@@ -20,6 +20,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using System.IO;
+using CloudinaryDotNet;
+using Proman.Constants;
 
 namespace Proman.Web.Host.Startup
 {
@@ -87,6 +89,15 @@ namespace Proman.Web.Host.Startup
                     )
                 )
             );
+
+            // Configure Cloudinary
+            var cloudinaryAccount = _appConfiguration.GetSection("Cloudinary").Get<CloudinaryAccount>();
+            var cloudinary = new Cloudinary(new Account(
+                cloudinaryAccount.CloudName,
+                cloudinaryAccount.ApiKey,
+                cloudinaryAccount.ApiSecret       
+            ));
+            services.AddSingleton(cloudinary);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)

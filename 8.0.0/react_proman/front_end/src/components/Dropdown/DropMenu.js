@@ -1,10 +1,9 @@
 import React, {useState } from 'react'
 import Modal from '../Modal/Modal'
 
-const DropMenu = ({options}) => {
+const DropMenu = ({options} ) => {
     const [open, setOpen] = useState(false)
     const [status,setStatus] = useState(false)
-  
   return (
     <div >  
    

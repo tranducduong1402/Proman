@@ -47,12 +47,8 @@ namespace Proman.APIs.Projects
                     Id = s.Id,
                     Name = s.Name,
                     Code = s.Code,
-                    Note = s.Note,
                     ProjectType = s.ProjectType,
                     Status = s.Status,
-                    CustomerId = s.CustomerId,
-                    CustomerEmailAddress = s.Customer.EmailAddress,
-                    CustomerFullname = s.Customer.FullName,
                     TimeStart = s.TimeStart,
                     TimeEnd = s.TimeEnd,
                     LastModifierTime = s.LastModificationTime,
@@ -88,25 +84,6 @@ namespace Proman.APIs.Projects
                     .Where(s => s.EmailAddress == email)
                     .FirstOrDefaultAsync();
         }
-
-        //[HttpDelete]
-        //public async System.Threading.Tasks.Task Delete(EntityDto<long> input)
-        //{
-        //    var hasRecord = await WorkLimit.GetAll<Project>().Where(x => x.Id == input.Id).AnyAsync();
-
-        //    var IsActive = await WorkLimit.GetAll<Project>()
-        //        .Where(x => x.Id == input.Id)
-        //        .Where(x => x.Status == ProjectStatus.Active)
-        //        .AnyAsync();
-
-        //    if (!hasRecord)
-        //        throw new UserFriendlyException(string.Format("There is no entity Position with id = {0}!", input.Id));
-
-        //    else if (IsActive)
-        //        throw new UserFriendlyException(string.Format("This project is Active with id = {0}!", input.Id));
-
-        //    await WorkLimit.GetRepo<Project>().DeleteAsync(input.Id);
-        //}
 
         [HttpPost]
         public async Task<ProjectDto> AddNew(ProjectDto input)
@@ -323,6 +300,34 @@ namespace Proman.APIs.Projects
                     UserId = s.UserId,
                     FullName = s.User.FullName,
                     EmailAddress = s.User.EmailAddress,
+                }).ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<List<GetClientDto>> GetAllClient()
+        {
+            return await WorkLimit.GetAll<User>()
+                .Where(s => s.Type == UserType.Client)
+                .Select(s => new GetClientDto
+                {
+                    ClientId = s.Id,
+                    EmailAddress = s.EmailAddress,
+                    FullName = s.FullName,
+                    UserName = s.UserName,
+                }).ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<List<GetClientDto>> GetAllUser()
+        {
+            return await WorkLimit.GetAll<User>()
+                .Where(s => s.Type != UserType.Client)
+                .Select(s => new GetClientDto
+                {
+                    ClientId = s.Id,
+                    EmailAddress = s.EmailAddress,
+                    FullName = s.FullName,
+                    UserName = s.UserName,
                 }).ToListAsync();
         }
     }
