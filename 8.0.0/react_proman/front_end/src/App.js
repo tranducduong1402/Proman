@@ -8,6 +8,8 @@ import ResetPassword from './screens/SignUp/ResetScreen';
 import UserScreen from './screens/User/UserScreen';
 import RoleScreen from './screens/Role/RoleScreen';
 import ClientScreen from './screens/Client/ClientScreen';
+import TaskScreen from './screens/Task/TaskScreen';
+import ProjectDetail from './screens/Project/ProjectDetail';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
@@ -47,6 +49,16 @@ const router = createBrowserRouter([
   {
     path: "/client",
     element: <ClientScreen/>,
+  },
+
+  {
+    path: "/task",
+    element: <TaskScreen/>,
+  },
+
+  {
+    path: "/projectdetail",
+    element: <ProjectDetail/>,
   },
 ]);
 

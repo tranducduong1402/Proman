@@ -3,7 +3,7 @@ import React from "react";
 export const Breadcrumb = (props) => {
   return (
     <div>
-      <nav class="flex mb-6" aria-label="Breadcrumb">
+      <nav class="flex ml-8 my-2" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
           {/* <li class="inline-flex items-center">
             <a
@@ -39,7 +39,7 @@ export const Breadcrumb = (props) => {
               </svg> */}
               <a
                 href="#"
-                class="ml-1 text-lg font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
+                class="ml-1 text-lg font-semibold text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
               >
                 {props.pagename1}
               </a>
@@ -60,7 +60,7 @@ export const Breadcrumb = (props) => {
                   clip-rule="evenodd"
                 ></path>
               </svg>
-              <span class="ml-1 text-lg font-medium text-blue-600 md:ml-2 dark:text-gray-400">
+              <span class="ml-1 text-lg font-semibold text-blue-600 md:ml-2 dark:text-gray-400">
                 {props.pagename2}
               </span>
             </div>
