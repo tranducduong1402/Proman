@@ -3,7 +3,7 @@ import avatar from "../../data/image/avatar.jpg";
 
 const Navbar = ({ props }) => {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between ">
       <div className="h-[80px] ">
         <i class="fa-solid fa-bars"></i>
         <span> Admin </span>
