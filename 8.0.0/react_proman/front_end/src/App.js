@@ -8,6 +8,8 @@ import ResetPassword from './screens/SignUp/ResetScreen';
 import UserScreen from './screens/User/UserScreen';
 import RoleScreen from './screens/Role/RoleScreen';
 import ClientScreen from './screens/Client/ClientScreen';
+import TaskScreen from './screens/Task/TaskScreen';
+import ProjectDetail from './screens/Project/ProjectDetail';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +47,16 @@ const router = createBrowserRouter([
   {
     path: "/client",
     element: <ClientScreen/>,
+  },
+
+  {
+    path: "/task",
+    element: <TaskScreen/>,
+  },
+
+  {
+    path: "/projectdetail",
+    element: <ProjectDetail/>,
   },
 ]);
 
