@@ -1,129 +1,212 @@
-import React, { useRef, useState } from 'react'
-import FormInput from '../FormInput/FormInput'
-import Search from '../Search/Search'
-import SelectMenu from '../SelectedMenu/SelectMenu'
+import React, { useEffect, useRef, useState } from "react";
+import FormInput from "../FormInput/FormInput";
+import Search from "../Search/Search";
+import SelectMenu from "../SelectedMenu/SelectMenu";
+import { useDispatch, useSelector } from "react-redux";
+import { createUser } from "../../Redux/Actions/UserAction";
+import { USER_CREATE_RESET } from "../../Redux/Constants/UserContants";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const modalRef = useRef(null);
   const handleClose = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
-       setIsOpen(false);
+      setIsOpen(false);
     }
   };
 
-const inputs = [
+  const inputs = [
     {
       id: 1,
-      name: "username",
+      name: "userName",
       type: "text",
       placeholder: "UserName",
       pattern: "^[A-Za-z0-9]{5,30}$",
       errorMessage: "Username must be length from 5 to 30 characters",
-      label: "Username",
+      label: "userName",
       required: true,
     },
     {
       id: 2,
-      name: "Email",
+      name: "name",
+      type: "text",
+      placeholder: "Name",
+      pattern: "^[A-Za-z0-9]{5,30}$",
+      errorMessage: "Username must be length from 5 to 30 characters",
+      label: "Name",
+      required: true,
+    },
+    {
+      id: 3,
+      name: "emailAddress",
       type: "email",
       placeholder: "Email",
       errorMessage: "Email must be length from 5 to 30 characters",
       label: "Email",
-      pattern: "^[A-Za-z0-9]{5,30}$",
       required: true,
     },
     {
-        id: 3,
-        name: "password",
-        type: "password",
-        placeholder: "Password",
-        errorMessage: "Password must be length from 5 to 30 characters",
-        label: "Password",
-        pattern: "^[A-Za-z0-9]{5,30}$",
-        required: true,
-      },
+      id: 4,
+      name: "password",
+      type: "password",
+      placeholder: "Password",
+      errorMessage: "Password must be length from 5 to 30 characters",
+      label: "Password",
+      pattern: "^[A-Za-z0-9]{5,30}$",
+      required: true,
+    },
 
-      {
-        id: 4,
-        name: "fullName",
-        type: "text",
-        placeholder: "FullName",
-        pattern: "^[A-Za-z0-9]{5,30}$",
-        errorMessage: "FullName must be length from 5 to 30",
-        label: "FullName",
-      },
+    {
+      id: 5,
+      name: "surname",
+      type: "text",
+      placeholder: "Full Name",
+      pattern: "^[A-Za-z0-9]{5,30}$",
+      errorMessage: "FullName must be length from 5 to 30",
+      label: "Full Name",
+    },
   ];
-  const filter = [ 
+  const filter = [
     {
-      title:'Position',
-      default:'All',
-      options: ['Dev', 'Tester', 'BA', 'Ux Ui']
+      title: "Position",
+      default: "All",
+      options: ["Dev", "Tester", "BA", "Ux Ui"],
     },
     {
-      title: 'Level',
-      default: 'All',
-      options:['Intern', 'Staff', 'Fresher', 'Junior','PM']
+      title: "Level",
+      default: "All",
+      options: ["Intern", "Staff", "Fresher", "Junior", "PM"],
     },
     {
-      title: 'User Type',
-      default: 'All',
-      options:['Basic User', 'Admin', 'Super Admin']
+      title: "User Type",
+      default: "All",
+      options: ["Basic User", "Admin", "Super Admin"],
     },
     {
-      title: 'Active',
-      default: 'All',
-      options:['Active', 'DeActive']
-    }
-  ]
+      title: "Active",
+      default: "All",
+      options: ["Active", "DeActive"],
+    },
+  ];
 
   const SelectInput1 = {
-      title:'User Type',
-      default:'Choose Value',
-      options:['Basic User', 'Admin', 'Super Admin']
-  }
+    name: "Type",
+    title: "roleNames",
+    default: "Choose Value",
+    options: [
+      {
+        name: "Basic User",
+        value: "Basic User",
+      },
+      {
+        name: "Admin",
+        value: "Admin",
+      },
+    ],
+  };
   const SelectInput2 = [
     {
-      title: 'Gender',
-      default: 'Choose Value',
-      options:['Male', 'FeMale']
+      name: "Gender",
+      title: "sex",
+      default: "Choose Value",
+      options: [
+        {
+          name: "Male",
+          value: 0,
+        },
+        {
+          name: "FeMale",
+          value: 1,
+        },
+      ],
     },
     {
-      title: 'Level',
-      default: 'Choose Value',
-      options:['Intern', 'Staff', 'Fresher', 'Junior','PM']
+      name: "Level",
+      title: "level",
+      default: "Choose Value",
+      options: [
+        {
+          value: 1,
+          name: "Intern",
+        },
+        {
+          value: 0,
+          name: "Staff",
+        },
+        {
+          value: 2,
+          name: "Collaborators",
+        },
+        {
+          value: 3,
+          name: "ProbationaryStaff ",
+        },
+      ],
     },
-  ]
+  ];
 
-  
+  //call api
+  const [values, setValues] = useState({
+    userName: null,
+    name: null,
+    surname: null,
+    roleNames:[],
+    sex: null,
+    level: null,
+    password: null,
+    emailAddress: null
+  });
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+  const handleChangeRole = (e) => {
+    setValues({ ...values, [e.target.name]: [e.target.value]});
+  };
+  const dispatch = useDispatch();
+  const adminCreate = useSelector((state) => state.adminCreate);
+  const { loading, error, user } = adminCreate;
+  useEffect(() => {
+    if (user) {
+      dispatch({ type: USER_CREATE_RESET });
+      setValues({
+        userName: null,
+        name: null,
+        surname: null,
+        roleNames:[],
+        sex: null,
+        level: null,
+        password: null,
+        emailAddress: null
+      })
+    }
+  }, [ dispatch]);
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(createUser(values));
+  };
 
   return (
-    <div className=' mb-7 mx-5 mt-8'>
-      <div className='flex justify-between'>
+    <div className=" mb-7 mx-5 mt-8">
+      <div className="flex justify-between">
         <div>
-         <Search/>
+          <Search />
         </div>
-        <div className=''>
-        <button 
-         className="bg-main_color text-white hover:opacity-80 w-[118px] h-[50px] rounded-lg text-sm"
-        onClick={() => setIsOpen(!isOpen)}
-         > 
-         <i class="fa-solid fa-plus mr-2"></i>
-          Add User
-        </button>
+        <div className="">
+          <button
+            className="bg-main_color text-white hover:opacity-80 w-[118px] h-[50px] rounded-lg text-sm"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <i class="fa-solid fa-plus mr-2"></i>
+            Add User
+          </button>
         </div>
-        
       </div>
-      <div className=' flex justify-between mt-7'>
-       {
-        filter.map((item) => (
-          <div className='w-[230px]'>
-          <SelectMenu props={item}/>
+      <div className=" flex justify-between mt-7">
+        {filter.map((item) => (
+          <div className="w-[230px]">
+            <SelectMenu props={item} />
           </div>
-           
-        ))
-       }
-       
+        ))}
       </div>
 
       {isOpen && (
@@ -131,41 +214,77 @@ const inputs = [
           className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81]"
           onClick={handleClose}
         >
-          <div className="bg-[#FFFFFF] p-8 rounded-lg shadow-lg " ref= { modalRef }>
-            <div className='w-[820px] h-[500px]'>
-             <h2 className='text-[18px] text-black font-bold mb-5 '> Add new user </h2>
-              <div className='flex justify-around' >
-               <div className=' w-[320px]'>
-                 <FormInput {...inputs[0]}/>
-                 <FormInput {...inputs[1]}/>
-                 <SelectMenu props={SelectInput1}/>
-                 <FormInput {...inputs[2]}/>
-               </div>
-                <div className=' w-[320px]'>
-                  <FormInput {...inputs[3]}/>
-                  {
-                    SelectInput2.map((item) => (
-                        <SelectMenu props={item}/>
-                    ))
-                  }
+          <div
+            className="bg-[#FFFFFF] p-8 rounded-lg shadow-lg "
+            ref={modalRef}
+          >
+            <div className="w-[820px] h-[500px]">
+              <h2 className="text-[18px] text-black font-bold mb-5 ">
+                {" "}
+                Add new user{" "}
+              </h2>
+              <form onSubmit={submitHandler}>
+              <div className="flex justify-around">
+                <div className=" w-[320px]">
+                  <FormInput
+                    key={inputs[0].id}
+                    {...inputs[0]}
+                    value={values[inputs.name]}
+                    onChange={handleChange}
+                  />
+                  <FormInput
+                    key={inputs[1].id}
+                    {...inputs[1]}
+                    value={values[inputs.name]}
+                    onChange={handleChange}
+                  />
+                  <SelectMenu props={SelectInput1} onChange={handleChangeRole} />
+                  <FormInput
+                    key={inputs[2].id}
+                    {...inputs[2]}
+                    value={values[inputs.name]}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className=" w-[320px]">
+                <FormInput
+                key={inputs[4].id}
+                {...inputs[4]}
+                value={values[inputs.name]}
+                onChange={handleChange}
+              />
+                  <FormInput
+                    key={inputs[3].id}
+                    {...inputs[3]}
+                    value={values[inputs.name]}
+                    onChange={handleChange}
+                  />
+                  {SelectInput2.map((item) => (
+                    <SelectMenu props={item} onChange={handleChange} />
+                  ))}
                 </div>
               </div>
-            <div className=' flex justify-end mr-5 mt-20'>
-             <button className="text-black bg-[#EEEFF3] px-4 py-2 rounded-lg mr-8 text-[15px] hover:opacity-80"
-              onClick={() => setIsOpen(!isOpen)}
-             >
-              Cancel
-              </button>
-             <button className="text-white bg-main_color px-5 py-2 rounded-lg  text-[15px] hover:opacity-90">
-              Save 
-             </button>
-            </div>  
+              <div className=" flex justify-end mr-5 mt-20">
+                <button
+                  className="text-black bg-[#EEEFF3] px-4 py-2 rounded-lg mr-8 text-[15px] hover:opacity-80"
+                  onClick={() => setIsOpen(!isOpen)}
+                >
+                  Cancel
+                </button>
+                <button className="text-white bg-main_color px-5 py-2 rounded-lg  text-[15px] hover:opacity-90" type="submit"
+                onClick={() => setIsOpen(!isOpen)}
+
+                >
+                  Save
+                </button>
+              </div>
+              </form>
             </div>
           </div>
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

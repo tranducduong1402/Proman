@@ -3,69 +3,136 @@ import FormInput from '../FormInput/FormInput';
 import SelectMenu from '../SelectedMenu/SelectMenu';
 
 const EditChildren = ({props}) => {
-  console.log(props)
-    const inputs = [
-        {
-          id: 1,
-          name: "username",
-          type: "text",
-          placeholder: "UserName",
-          pattern: "^[A-Za-z0-9]{5,30}$",
-          errorMessage: "Username must be length from 5 to 30 characters",
-          label: "Username",
-          required: true,
-        },
-        {
-          id: 2,
-          name: "Email",
-          type: "email",
-          placeholder: "Email",
-          errorMessage: "Email must be length from 5 to 30 characters",
-          label: "Email",
-          pattern: "^[A-Za-z0-9]{5,30}$",
-          required: true,
-        },
-        {
-            id: 3,
-            name: "password",
-            type: "password",
-            placeholder: "Password",
-            errorMessage: "Password must be length from 5 to 30 characters",
-            label: "Password",
-            pattern: "^[A-Za-z0-9]{5,30}$",
-            required: true,
-          },
-    
-          {
-            id: 4,
-            name: "fullName",
-            type: "text",
-            placeholder: "FullName",
-            pattern: "^[A-Za-z0-9]{5,30}$",
-            errorMessage: "FullName must be length from 5 to 30",
-            label: "FullName",
-          },
-      ];
+  const inputs = [
+    {
+      id: 1,
+      name: "userName",
+      type: "text",
+      placeholder: "UserName",
+      pattern: "^[A-Za-z0-9]{5,30}$",
+      errorMessage: "Username must be length from 5 to 30 characters",
+      label: "userName",
+      required: true,
+    },
+    {
+      id: 2,
+      name: "name",
+      type: "text",
+      placeholder: "Name",
+      pattern: "^[A-Za-z0-9]{5,30}$",
+      errorMessage: "Username must be length from 5 to 30 characters",
+      label: "Name",
+      required: true,
+    },
+    {
+      id: 3,
+      name: "emailAddress",
+      type: "email",
+      placeholder: "Email",
+      errorMessage: "Email must be length from 5 to 30 characters",
+      label: "Email",
+      required: true,
+    },
+    {
+      id: 4,
+      name: "password",
+      type: "password",
+      placeholder: "Password",
+      errorMessage: "Password must be length from 5 to 30 characters",
+      label: "Password",
+      pattern: "^[A-Za-z0-9]{5,30}$",
+      required: true,
+    },
 
-    const SelectInput1 = {
-        title:'User Type',
-        default:'Choose Value',
-        options:['Basic User', 'Admin', 'Super Admin']
-    }
+    {
+      id: 5,
+      name: "surname",
+      type: "text",
+      placeholder: "Full Name",
+      pattern: "^[A-Za-z0-9]{5,30}$",
+      errorMessage: "FullName must be length from 5 to 30",
+      label: "Full Name",
+    },
+  ];
+  const filter = [
+    {
+      title: "Position",
+      default: "All",
+      options: ["Dev", "Tester", "BA", "Ux Ui"],
+    },
+    {
+      title: "Level",
+      default: "All",
+      options: ["Intern", "Staff", "Fresher", "Junior", "PM"],
+    },
+    {
+      title: "User Type",
+      default: "All",
+      options: ["Basic User", "Admin", "Super Admin"],
+    },
+    {
+      title: "Active",
+      default: "All",
+      options: ["Active", "DeActive"],
+    },
+  ];
 
-    const SelectInput2 = 
-    [
+  const SelectInput1 = {
+    name: "Type",
+    title: "roleNames",
+    default: "Choose Value",
+    options: [
       {
-        title: 'Gender',
-        default: 'Choose Value',
-        options:['Male', 'FeMale']
+        name: "Basic User",
+        value: "Basic User",
       },
       {
-        title: 'Level',
-        default: 'Choose Value',
-        options:['Intern', 'Staff', 'Fresher', 'Junior','PM']
+        name: "Admin",
+        value: "Admin",
       },
-    ]  
+    ],
+  };
+  const SelectInput2 = [
+    {
+      name: "Gender",
+      title: "sex",
+      default: "Choose Value",
+      options: [
+        {
+          name: "Male",
+          value: 0,
+        },
+        {
+          name: "FeMale",
+          value: 1,
+        },
+      ],
+    },
+    {
+      name: "Level",
+      title: "level",
+      default: "Choose Value",
+      options: [
+        {
+          value: 1,
+          name: "Intern",
+        },
+        {
+          value: 0,
+          name: "Staff",
+        },
+        {
+          value: 2,
+          name: "Collaborators",
+        },
+        {
+          value: 3,
+          name: "ProbationaryStaff ",
+        },
+      ],
+    },
+  ];
+
   return (
     <div> 
     <h2 className='text-[18px] text-black font-bold mb-5 '> { props.title }</h2>

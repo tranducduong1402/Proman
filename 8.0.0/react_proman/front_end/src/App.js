@@ -8,6 +8,8 @@ import ResetPassword from './screens/SignUp/ResetScreen';
 import UserScreen from './screens/User/UserScreen';
 import RoleScreen from './screens/Role/RoleScreen';
 import ClientScreen from './screens/Client/ClientScreen';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 const router = createBrowserRouter([
   {
@@ -49,6 +51,17 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+
+  const dispatch = useDispatch();
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  useEffect(() => {
+    if (userInfo ) {
+      console.log('cos user r')
+    }
+  }, [dispatch, userInfo]);
+
   return (
     <div className="App">
       <RouterProvider router={router} />
