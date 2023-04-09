@@ -22,7 +22,6 @@ namespace Proman.Users.Dto
         public string FullName { get; set; }
         public List<int> RoleId { get; set; }
         public List<string> RoleNames { get; set; }
-        //public IEnumerable<PUDto> ProjectUsers { get; set; }
         public UserType? Type { get; set; }
         public string UserCode { get; set; }
         public UserLevel? Level { get; set; }

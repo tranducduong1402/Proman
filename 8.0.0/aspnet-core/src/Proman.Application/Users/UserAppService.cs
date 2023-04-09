@@ -68,6 +68,7 @@ namespace Proman.Users
 
             user.TenantId = AbpSession.TenantId;
             user.IsEmailConfirmed = true;
+            user.IsActive = true;
 
             await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
 
@@ -321,23 +322,9 @@ namespace Proman.Users
                                  RoleName = r.Name
                              };
 
-            //var qprojectUsers = from pu in _workLimit.GetAll<ProjectUser>().Where(s => s.User.IsActive == true)
-            //                    join p in _workLimit.GetAll<Project>().Where(s => s.Status == ProjectStatus.Active) on pu.ProjectId equals p.Id
-            //                    where pu.Type != ProjectUserType.DeActive
-            //                    select new
-            //                    {
-            //                        pu.ProjectId,
-            //                        p.Code,
-            //                        p.Name,
-            //                        pu.UserId,
-            //                        pu.Type
-            //                    };
-
 
             var query = from u in _workLimit.GetAll<User>()
-                        //join pu in qprojectUsers on u.Id equals pu.UserId into pusers
                         join ur in qUserRoles on u.Id equals ur.UserId into roles
-                        //join mu in _workLimit.GetAll<User>() on u.ManagerId equals mu.Id into muu
                         select new GetAllUserDto
                         {
                             Id = u.Id,
@@ -349,110 +336,18 @@ namespace Proman.Users
                             RoleNames = _workLimit.GetAll<Role, int>()
                             .Where(s => _workLimit.GetAll<UserRole>().Where(s => s.UserId == u.Id).Select(s => s.RoleId).ToList()
                             .Contains(s.Id)).Select(s => s.Name).ToList(),
-                            //ProjectUsers = pusers.Select(s => new PUDto
-                            //{
-                            //    ProjectId = s.ProjectId,
-                            //    ProjectName = s.Name,
-                            //    ProjectCode = s.Code,
-                            //    ProjectUserType = s.Type
-                            //}).ToList(),
                             Type = u.Type,
                             Level = u.Level,
                             UserCode = u.UserCode,
-                            //AvatarPath = u.AvatarPath,
-                            //ManagerId = u.ManagerId,
                             Sex = u.Sex,
                             CreationTime = u.CreationTime,
-                            //ManagerName = muu.FirstOrDefault() != null ? muu.FirstOrDefault().FullName : "",
-                            //ManagerAvatarPath = muu.FirstOrDefault() != null ? muu.FirstOrDefault().AvatarPath : "",
                             PositionId = u.Position.Id,
                             PositionName = u.Position.Name
                         };
             query = query.OrderByDescending(s => s.CreationTime);
             var temp = await query.GetGridResult(query, input);
-
-            //var projectIds = new HashSet<long?>();
-            //foreach (var user in temp.Items)
-            //{
-            //    projectIds.UnionWith(user.ProjectUsers.Select(s => s.ProjectId));
-            //}
-
-            //var projects = (_workLimit.GetAll<ProjectUser>()
-            //        .Where(s => projectIds.Contains(s.ProjectId) && s.Type == ProjectUserType.PM)
-            //        .Select(s => new { s.ProjectId, s.User.FullName })
-            //        .GroupBy(s => s.ProjectId))
-            //        .Select(s => new { s.Key, pms = s.Select(f => f.FullName).ToList() }).ToList();
-
-            //foreach (var user in temp.Items)
-            //{
-            //    foreach (var pu in user.ProjectUsers)
-            //    {
-            //        pu.Pms = projects.Where(s => s.Key == pu.ProjectId).Select(s => s.pms).FirstOrDefault();
-            //    }
-            //}
             return new PagedResultDto<GetAllUserDto>(temp.TotalCount, temp.Items);
         }
-
-        //private async Task<PUDto> GetProjectByUserId(long userId)
-        //{
-        //    return await _workLimit.GetAll<ProjectUser>().Where(s => s.UserId == userId)
-        //        .Select(s => new PUDto
-        //        {
-        //            ProjectId = s.ProjectId,
-        //            ProjectCode = s.Project.Code,
-        //            ProjectName = s.Project.Name,
-        //        }).FirstOrDefaultAsync();
-        //}
-
-        //private async Task<Role> GetRoleByUserId(long userId)
-        //{
-        //    var qUserRoles = from ur in _workLimit.GetAll<UserRole>()
-        //                     join r in _workLimit.GetAll<Role, int>() on ur.RoleId equals r.Id
-        //                     select new
-        //                     {
-        //                         ur.UserId,
-        //                         RoleName = r.Name
-        //                     };
-        //    return qUserRoles.FirstOrDefaultAsync();
-        //}
-
-        //public async Task<GridResult<GetAllUserDto>> GetAllPaging(GridParam input)
-        //{
-
-        //    var query = await _workLimit.GetAll<User>()
-        //        .Select(s => new GetAllUserDto
-        //        {
-        //            Id = s.Id,
-        //            UserName = s.UserName,
-        //            Name = s.Name,
-        //            Surname = s.Surname,
-        //            FullName = s.FullName,
-        //            Address = s.Address,
-        //            IsActive = s.IsActive,
-        //            EmailAddress = s.EmailAddress,
-        //            RoleNames = roles.Select(s => s.RoleName).ToArray(),
-        //            ProjectUsers = pusers.Select(s => new PUDto
-        //            {
-        //                ProjectId = s.ProjectId,
-        //                ProjectName = s.Name,
-        //                ProjectCode = s.Code,
-        //                ProjectUserType = s.Type
-        //            }).ToList(),
-        //            Type = u.Type,
-        //            Level = u.Level,
-        //            StartDateAt = u.StartDateAt,
-        //            UserCode = u.UserCode,
-        //            AvatarPath = u.AvatarPath,
-        //            ManagerId = u.ManagerId,
-        //            Sex = u.Sex,
-        //            CreationTime = u.CreationTime,
-        //            ManagerName = muu.FirstOrDefault() != null ? muu.FirstOrDefault().FullName : "",
-        //            ManagerAvatarPath = muu.FirstOrDefault() != null ? muu.FirstOrDefault().AvatarPath : "",
-        //            PositionId = u.Position.Id,
-        //            PositionName = u.Position.Name
-        //        });
-        //    return await query.GetGridResult(query, input);
-        //}
     }
 }
 
