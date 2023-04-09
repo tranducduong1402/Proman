@@ -9,77 +9,20 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import avatar from "../../data/image/avatar.jpg";
 import { listUser } from "../../Redux/Actions/UserAction";
 const UserScreen = () => {
-  const [result, setResult] = useState([]);
-  const [loading, setLoading] = useState(false);
-
   const dispatch = useDispatch();
+
   const userList = useSelector((state) => state.userList);
+  const { loading, error, users } = userList;
+
+  const userDelete = useSelector((state) => state.userDelete);
+  const { error: errorDelete, success: successDelete } = userDelete;
 
   useEffect(() => {
     dispatch(listUser());
-  }, [dispatch]);
+  }, [dispatch, successDelete]);
 
-  const userInfo = localStorage.getItem("userInfo")
-    ? JSON.parse(localStorage.getItem("userInfo"))
-    : null;
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${userInfo.result.accessToken}`,
-    },
-  };
- /* fetching Data */
- const fetchData = async () => {
-  try {
-    setLoading(true);
-    const response = await fetch("http://localhost:4000/api/products");
-    const jsonData = await response.json();
-    setResult(jsonData);
-    return jsonData;
-  } catch (error) {
-    console.log(error);
-  } finally {
-    setLoading(false);
-  }
-};
-
-useEffect(() => {
-  fetchData();
-}, []);
-  const data = [
-    {
-      id: 1,
-      name: "Dương Đỗ",
-      email: "DuongnoDo@example.com",
-      position: "dev",
-      type: " staff",
-      project: " Proman ",
-      sex: "Male",
-      roles: "admin",
-    },
-    {
-      id: 2,
-      name: "John Doe",
-      email: "johndoe@example.com",
-      position: "dev",
-      type: " staff",
-      project: " Proman ",
-      sex: "Male",
-      roles: "admin",
-    },
-    {
-      id: 3,
-      name: "John Doe",
-      email: "johndoe@example.com",
-      position: "dev",
-      type: " staff",
-      project: " Proman ",
-      sex: "Male",
-      roles: "admin",
-    },
-  ];
   const options = ["View", "Edit", "Delete"];
-console.log(result.result)
+
   return (
     <div className="flex">
       <Sidebar />
@@ -136,7 +79,7 @@ console.log(result.result)
                 <div> loading ... </div>
               ) :  (
                 <React.Fragment>
-                  {data.map((item, index) => (
+                  {users.map((item, index) => (
                     <tr
                       key={item.id}
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -168,11 +111,9 @@ console.log(result.result)
                         />
                         <div className="pl-3">
                           <div className="text-base font-semibold">
-                            {" "}
                             {item.userName}
                           </div>
                           <div className="font-normal text-gray-500">
-                            {" "}
                             {item.emailAddress}
                           </div>
                         </div>
@@ -180,7 +121,6 @@ console.log(result.result)
                       <td className="px-6 py-4">{item.positionName}</td>
 
                       <td className="px-6 py-4">Staff</td>
-
                       <td className="px-6 py-4">Male</td>
                       <td className="px-6 py-4">{item.roleNames}</td>
                       <td className="px-6 py-8">
@@ -195,7 +135,7 @@ console.log(result.result)
                         )}
                       </td>
                       <td className="px-6 py-8">
-                        <DropMenu options={options} />
+                        <DropMenu options={options}  id ={item.id} />
                       </td>
                     </tr>
                   ))}

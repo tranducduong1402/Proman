@@ -1,8 +1,20 @@
-import React from 'react'
-import FormInput from '../FormInput/FormInput';
-import SelectMenu from '../SelectedMenu/SelectMenu';
+import React, { useEffect, useState } from "react";
+import FormInput from "../FormInput/FormInput";
+import SelectMenu from "../SelectedMenu/SelectMenu";
+import { useDispatch, useSelector } from "react-redux";
+import { editUser } from "../../Redux/Actions/UserAction";
 
-const EditChildren = ({props}) => {
+const EditChildren = ({ props, id }) => {
+  const [values, setValues] = useState({
+    userName: null,
+    name: null,
+    surname: null,
+    roleNames: [],
+    sex: null,
+    level: null,
+    emailAddress: null,
+  });
+
   const inputs = [
     {
       id: 1,
@@ -34,17 +46,6 @@ const EditChildren = ({props}) => {
       required: true,
     },
     {
-      id: 4,
-      name: "password",
-      type: "password",
-      placeholder: "Password",
-      errorMessage: "Password must be length from 5 to 30 characters",
-      label: "Password",
-      pattern: "^[A-Za-z0-9]{5,30}$",
-      required: true,
-    },
-
-    {
       id: 5,
       name: "surname",
       type: "text",
@@ -53,30 +54,7 @@ const EditChildren = ({props}) => {
       errorMessage: "FullName must be length from 5 to 30",
       label: "Full Name",
     },
-  ];
-  const filter = [
-    {
-      title: "Position",
-      default: "All",
-      options: ["Dev", "Tester", "BA", "Ux Ui"],
-    },
-    {
-      title: "Level",
-      default: "All",
-      options: ["Intern", "Staff", "Fresher", "Junior", "PM"],
-    },
-    {
-      title: "User Type",
-      default: "All",
-      options: ["Basic User", "Admin", "Super Admin"],
-    },
-    {
-      title: "Active",
-      default: "All",
-      options: ["Active", "DeActive"],
-    },
-  ];
-
+  ]
   const SelectInput1 = {
     name: "Type",
     title: "roleNames",
@@ -133,27 +111,49 @@ const EditChildren = ({props}) => {
     },
   ];
 
-  return (
-    <div> 
-    <h2 className='text-[18px] text-black font-bold mb-5 '> { props.title }</h2>
-    <div className='flex justify-around' >
-     <div className=' w-[320px]'>
-      <FormInput {...inputs[0]}/>
-      <FormInput {...inputs[1]}/>
-      <SelectMenu props={SelectInput1}/>
-      <FormInput {...inputs[2]}/>
-     </div>
-      <div className=' w-[320px]'>
-       <FormInput {...inputs[3]}/>
-       {
-         SelectInput2.map((item) => (
-             <SelectMenu props={item}/>
-         ))
-       }
-     </div>
-    </div>
-    </div>
-  )
-}
+  const dispatch = useDispatch();
+  const userEdit = useSelector((state) => state.userEdit);
+  const { loading, error, user } = userEdit;
 
-export default EditChildren
+  // const userUpdate = useSelector((state) => state.productUpdate);
+  // const {
+  //   loading: loadingUpdate,
+  //   error: errorUpdate,
+  //   success: successUpdate,
+  // } =userUpdate;
+
+  useEffect(() => {
+      dispatch(editUser(id));
+    setValues({ 
+      userName: user.userName,
+      name: user.name,
+      surname: user.surname,
+      roleNames: user.roleNames ,
+      sex: user.sex,
+      level: user.level,
+      emailAddress: user.emailAddress
+       });
+  }, [dispatch, id]);
+ console.log(values)
+  return (
+    <div>
+      <h2 className="text-[18px] text-black font-bold mb-5 "> {props.title}</h2>
+      <div className="flex justify-around">
+        <div className=" w-[320px]">
+          <FormInput value={values[inputs[0].name]} {...inputs[0]} />
+          <FormInput value={values[inputs[1].name]} {...inputs[1]} />
+          <SelectMenu props={SelectInput1} value={values['roleNames']} />
+          <FormInput value={values[inputs[2].name]} {...inputs[2]} />
+        </div>
+        <div className=" w-[320px]">
+          <FormInput value={values[inputs[3].name]} {...inputs[3]} />
+          {SelectInput2.map((item) => (
+            <SelectMenu props={item}  value={values[item.title]} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EditChildren;

@@ -1,7 +1,7 @@
 import React, { useRef, useState }  from "react";
 import EditChildren from "./EditChildren";
 
-const Modal = ({ status }) => {
+const Modal = ({ status, id }) => {
   const [isOpen, setIsOpen] = useState(status);
   const modalRef = useRef(null);
   const handleClose = (event) => {
@@ -19,7 +19,7 @@ const Modal = ({ status }) => {
         >
           <div className="bg-[#FFFFFF] p-8 rounded-lg shadow-lg " ref= { modalRef }>
             <div className='w-[820px] h-[500px]'>
-              <EditChildren props={'Edit'} />
+              <EditChildren props={'Edit'} id = {id}/>
             <div className=' flex justify-end mr-5 mt-20'>
              <button className="text-black bg-[#EEEFF3] px-4 py-2 rounded-lg mr-8 text-[15px] hover:opacity-80"
               onClick={() => setIsOpen(!isOpen)}

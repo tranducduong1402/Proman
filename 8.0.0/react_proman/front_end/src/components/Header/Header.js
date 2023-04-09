@@ -165,17 +165,18 @@ const Header = () => {
   const dispatch = useDispatch();
   const adminCreate = useSelector((state) => state.adminCreate);
   const { loading, error, user } = adminCreate;
+  
   useEffect(() => {
     if (user) {
       dispatch({ type: USER_CREATE_RESET });
-      setValues({
-        userName: null,
-        name: null,
-        surname: null,
+    setValues({
+      userName: null,
+      name: null,
+      surname: null,
         roleNames:[],
-        sex: null,
-        level: null,
-        password: null,
+      sex: null,
+      level: null,
+      password: null,
         emailAddress: null
       })
     }
@@ -183,6 +184,7 @@ const Header = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(createUser(values));
+    setIsOpen(!isOpen)
   };
 
   return (
@@ -214,73 +216,74 @@ const Header = () => {
           className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81]"
           onClick={handleClose}
         >
-          <div
-            className="bg-[#FFFFFF] p-8 rounded-lg shadow-lg "
-            ref={modalRef}
-          >
-            <div className="w-[820px] h-[500px]">
-              <h2 className="text-[18px] text-black font-bold mb-5 ">
-                {" "}
-                Add new user{" "}
-              </h2>
+            <div
+              className="bg-[#FFFFFF] p-8 rounded-lg shadow-lg "
+              ref={modalRef}
+            >
+              <div className="w-[820px] h-[500px]">
+                <h2 className="text-[18px] text-black font-bold mb-5 ">
+                  {" "}
+                  Add new user{" "}
+                </h2>
               <form onSubmit={submitHandler}>
-              <div className="flex justify-around">
-                <div className=" w-[320px]">
-                  <FormInput
-                    key={inputs[0].id}
-                    {...inputs[0]}
+                <div className="flex justify-around">
+                  <div className=" w-[320px]">
+                    <FormInput
+                      key={inputs[0].id}
+                      {...inputs[0]}
                     value={values[inputs.name]}
-                    onChange={handleChange}
-                  />
-                  <FormInput
-                    key={inputs[1].id}
-                    {...inputs[1]}
+                      onChange={handleChange}
+                    />
+                    <FormInput
+                      key={inputs[1].id}
+                      {...inputs[1]}
                     value={values[inputs.name]}
-                    onChange={handleChange}
-                  />
+                      onChange={handleChange}
+                    />
                   <SelectMenu props={SelectInput1} onChange={handleChangeRole} />
-                  <FormInput
-                    key={inputs[2].id}
-                    {...inputs[2]}
+                    <FormInput
+                      key={inputs[2].id}
+                      {...inputs[2]}
                     value={values[inputs.name]}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className=" w-[320px]">
-                <FormInput
-                key={inputs[4].id}
-                {...inputs[4]}
-                value={values[inputs.name]}
-                onChange={handleChange}
-              />
-                  <FormInput
-                    key={inputs[3].id}
-                    {...inputs[3]}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className=" w-[320px]">
+                    <FormInput
+                      key={inputs[4].id}
+                      {...inputs[4]}
                     value={values[inputs.name]}
-                    onChange={handleChange}
-                  />
-                  {SelectInput2.map((item) => (
-                    <SelectMenu props={item} onChange={handleChange} />
-                  ))}
+                      onChange={handleChange}
+                    />
+                    <FormInput
+                      key={inputs[3].id}
+                      {...inputs[3]}
+                    value={values[inputs.name]}
+                      onChange={handleChange}
+                    />
+                    {SelectInput2.map((item) => (
+                      <SelectMenu props={item} onChange={handleChange} />
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className=" flex justify-end mr-5 mt-20">
-                <button
-                  className="text-black bg-[#EEEFF3] px-4 py-2 rounded-lg mr-8 text-[15px] hover:opacity-80"
-                  onClick={() => setIsOpen(!isOpen)}
-                >
-                  Cancel
-                </button>
-                <button className="text-white bg-main_color px-5 py-2 rounded-lg  text-[15px] hover:opacity-90" type="submit"
-                onClick={() => setIsOpen(!isOpen)}
+                <div className=" flex justify-end mr-5 mt-20">
+                  <button
+                    className="text-black bg-[#EEEFF3] px-4 py-2 rounded-lg mr-8 text-[15px] hover:opacity-80"
+                    onClick={() => setIsOpen(!isOpen)}
 
-                >
-                  Save
-                </button>
-              </div>
+                  >
+                    Cancel
+                  </button>
+                   <button className="text-white bg-main_color px-5 py-2 rounded-lg  text-[15px] hover:opacity-90"
+
+                    type="submit"                   
+                  >
+                    Save
+                  </button>
+                </div>
               </form>
+              </div>
             </div>
-          </div>
         </div>
       )}
     </div>
