@@ -2,6 +2,7 @@
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
 using Abp.Runtime.Validation;
+using Proman.Anotations;
 using Proman.Authorization.Users;
 using System;
 using System.Collections.Generic;
@@ -19,10 +20,12 @@ namespace Proman.DomainServices.Dto
         public long Id { get; set; }
         [Required]
         [StringLength(AbpUserBase.MaxUserNameLength)]
+        [ApplySearch]
         public string UserName { get; set; }
 
         [Required]
         [StringLength(AbpUserBase.MaxNameLength)]
+        [ApplySearch]
         public string Name { get; set; }
 
         [Required]
@@ -32,6 +35,7 @@ namespace Proman.DomainServices.Dto
         [Required]
         [EmailAddress]
         [StringLength(AbpUserBase.MaxEmailAddressLength)]
+        [ApplySearch]
         public string EmailAddress { get; set; }
 
         public bool IsActive { get; set; }
@@ -46,6 +50,7 @@ namespace Proman.DomainServices.Dto
         public UserType? Type { get; set; }
         public UserLevel? Level { get; set; }
         public DateTime? StartDateAt { get; set; }
+        [ApplySearch]
         public string UserCode { get; set; }
         public void Normalize()
         {
