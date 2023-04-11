@@ -55,7 +55,7 @@ export const login = (userNameOrEmailAddress, password) => async (dispatch) => {
 };
 
 // ALL USER
-export const listUser = () => async (dispatch, getState) => {
+export const listUser = (keyword = "") => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_LIST_REQUEST });
 
@@ -70,7 +70,7 @@ export const listUser = () => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get(
-      `https://localhost:44311/api/services/app/User/GetAllPagging`,
+      `https://localhost:44311/api/services/app/User/GetAllPagging?SearchText=${keyword}`,
       config
     );
 

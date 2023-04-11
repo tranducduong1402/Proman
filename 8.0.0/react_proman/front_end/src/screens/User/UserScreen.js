@@ -8,9 +8,11 @@ import Pagination from "../../components/Pagination/Pagination";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import avatar from "../../data/image/avatar.jpg";
 import { listUser } from "../../Redux/Actions/UserAction";
+import { useParams } from "react-router-dom";
 const UserScreen = () => {
   const dispatch = useDispatch();
-
+  const keyword =useParams().keyword;
+  console.log(keyword)
   const userList = useSelector((state) => state.userList);
   const { loading, error, users } = userList;
 
@@ -28,8 +30,8 @@ const UserScreen = () => {
 
 
   useEffect(() => {
-    dispatch(listUser());
-  }, [dispatch, successDelete, successUpdate]);
+    dispatch(listUser(keyword));
+  }, [dispatch, successDelete, successUpdate, keyword]);
 
   const options = ["View", "Edit", "Delete"];
 

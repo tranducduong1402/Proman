@@ -5,6 +5,7 @@ import SelectMenu from "../SelectedMenu/SelectMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser } from "../../Redux/Actions/UserAction";
 import { USER_CREATE_RESET } from "../../Redux/Constants/UserContants";
+import { useParams } from "react-router-dom";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +15,7 @@ const Header = () => {
       setIsOpen(false);
     }
   };
-
+  
   const inputs = [
     {
       id: 1,
