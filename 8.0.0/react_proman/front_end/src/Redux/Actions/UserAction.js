@@ -243,10 +243,9 @@ export const deleteUser = (id) => async (dispatch, getState) => {
     const {
       userLogin: { userInfo },
     } = getState();
-    
+   
     const config = {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.result.accessToken}`,
       },
     };
