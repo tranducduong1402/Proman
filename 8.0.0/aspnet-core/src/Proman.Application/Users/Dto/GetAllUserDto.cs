@@ -18,7 +18,6 @@ namespace Proman.Users.Dto
         [ApplySearch]
         public string EmailAddress { get; set; }
         public bool IsActive { get; set; }
-        [ApplySearch]
         public string FullName { get; set; }
         public List<int> RoleId { get; set; }
         public List<string> RoleNames { get; set; }
