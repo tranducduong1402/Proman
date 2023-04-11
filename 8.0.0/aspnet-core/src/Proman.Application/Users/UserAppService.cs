@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Proman.Authorization;
 using Proman.Authorization.Roles;
 using Proman.Authorization.Users;
+using Proman.DomainServices;
 using Proman.DomainServices.Dto;
 using Proman.Extension;
 using Proman.IIoc;
@@ -39,6 +40,7 @@ namespace Proman.Users
         private readonly IAbpSession _abpSession;
         private readonly LogInManager _logInManager;
         private readonly IWorkLimit _workLimit;
+        private readonly IUserServices _userServices;
 
         public UserAppService(
             IRepository<User, long> repository,
@@ -48,6 +50,7 @@ namespace Proman.Users
             IPasswordHasher<User> passwordHasher,
             IAbpSession abpSession,
             IWorkLimit workLimit,
+            IUserServices userServices,
             LogInManager logInManager)
             : base(repository)
         {
@@ -58,6 +61,7 @@ namespace Proman.Users
             _abpSession = abpSession;
             _logInManager = logInManager;
             _workLimit = workLimit;
+            _userServices = userServices;
         }
 
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
@@ -86,20 +90,8 @@ namespace Proman.Users
 
         public override async Task<UserDto> UpdateAsync(UserDto input)
         {
-            CheckUpdatePermission();
-
-            var user = await _userManager.GetUserByIdAsync(input.Id);
-
-            MapToEntity(input, user);
-
-            CheckErrors(await _userManager.UpdateAsync(user));
-
-            if (input.RoleNames != null)
-            {
-                CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
-            }
-
-            return await GetAsync(input);
+            await _userServices.UpdateUserAsync(input);
+            return input;
         }
 
         public override async System.Threading.Tasks.Task DeleteAsync(EntityDto<long> input)
