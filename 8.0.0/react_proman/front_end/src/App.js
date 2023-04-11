@@ -40,7 +40,6 @@ const router = createBrowserRouter([
     path: "/user",
     element: <UserScreen />,
   },
-
   {
     path: "/role",
     element: <RoleScreen />,

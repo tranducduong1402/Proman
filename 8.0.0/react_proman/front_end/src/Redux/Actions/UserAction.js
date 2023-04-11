@@ -215,13 +215,13 @@ export const updateUser = (user) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.put(
-      `/api/USERs/${user._id}`,
+      `https://localhost:44311/api/services/app/User/Update`,
       user,
       config
     );
 
-    dispatch({ type: user, payload: data });
     dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
+    dispatch({ type: USER_EDIT_SUCCESS, payload: data });
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -243,7 +243,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
     const {
       userLogin: { userInfo },
     } = getState();
-    
+   
     const config = {
       headers: {
         "Content-Type": "application/json",
