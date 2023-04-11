@@ -3,6 +3,7 @@ import FormInput from "../FormInput/FormInput";
 import SelectMenu from "../SelectedMenu/SelectMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { editUser } from "../../Redux/Actions/UserAction";
+import { USER_UPDATE_RESET } from "../../Redux/Constants/UserContants";
 
 const EditChildren = ({ props, id }) => {
   const [values, setValues] = useState({
@@ -54,7 +55,7 @@ const EditChildren = ({ props, id }) => {
       errorMessage: "FullName must be length from 5 to 30",
       label: "Full Name",
     },
-  ]
+  ];
   const SelectInput1 = {
     name: "Type",
     title: "roleNames",
@@ -115,26 +116,41 @@ const EditChildren = ({ props, id }) => {
   const userEdit = useSelector((state) => state.userEdit);
   const { loading, error, user } = userEdit;
 
-  // const userUpdate = useSelector((state) => state.productUpdate);
-  // const {
-  //   loading: loadingUpdate,
-  //   error: errorUpdate,
-  //   success: successUpdate,
-  // } =userUpdate;
+  const userUpdate = useSelector((state) => state.userUpdate);
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = userUpdate;
 
   useEffect(() => {
-      dispatch(editUser(id));
-    setValues({ 
+    if (successUpdate) {
+      dispatch({ type: USER_UPDATE_RESET });
+    }
+    dispatch(editUser(id));
+
+    setValues({
       userName: user.userName,
       name: user.name,
       surname: user.surname,
-      roleNames: user.roleNames ,
+      roleNames: user.roleNames,
       sex: user.sex,
       level: user.level,
-      emailAddress: user.emailAddress
-       });
+      emailAddress: user.emailAddress,
+    });
   }, [dispatch, id]);
- console.log(values)
+
+
+  const submitHandler = (e, id) => {
+    e.preventDefault();
+    dispatch(
+      updateUse({
+        id: id,
+        ...values       
+      })
+    );
+  };
+
   return (
     <div>
       <h2 className="text-[18px] text-black font-bold mb-5 "> {props.title}</h2>
@@ -142,13 +158,13 @@ const EditChildren = ({ props, id }) => {
         <div className=" w-[320px]">
           <FormInput value={values[inputs[0].name]} {...inputs[0]} />
           <FormInput value={values[inputs[1].name]} {...inputs[1]} />
-          <SelectMenu props={SelectInput1} value={values['roleNames']} />
+          <SelectMenu props={SelectInput1} value={values["roleNames"]} />
           <FormInput value={values[inputs[2].name]} {...inputs[2]} />
         </div>
         <div className=" w-[320px]">
           <FormInput value={values[inputs[3].name]} {...inputs[3]} />
           {SelectInput2.map((item) => (
-            <SelectMenu props={item}  value={values[item.title]} />
+            <SelectMenu props={item} value={values[item.title]} />
           ))}
         </div>
       </div>

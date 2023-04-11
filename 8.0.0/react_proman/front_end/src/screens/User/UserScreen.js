@@ -17,9 +17,19 @@ const UserScreen = () => {
   const userDelete = useSelector((state) => state.userDelete);
   const { error: errorDelete, success: successDelete } = userDelete;
 
+  const userUpdate = useSelector((state) => state.userUpdate);
+
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = userUpdate;
+
+
+
   useEffect(() => {
     dispatch(listUser());
-  }, [dispatch, successDelete]);
+  }, [dispatch, successDelete, successUpdate]);
 
   const options = ["View", "Edit", "Delete"];
 

@@ -90,7 +90,7 @@ const Header = () => {
   ];
 
   const SelectInput1 = {
-    name: "Type",
+    name: "RoleNames",
     title: "roleNames",
     default: "Choose Value",
     options: [
@@ -121,8 +121,8 @@ const Header = () => {
       ],
     },
     {
-      name: "Level",
-      title: "level",
+      name: "Type",
+      title: "type",
       default: "Choose Value",
       options: [
         {
@@ -173,7 +173,7 @@ const Header = () => {
       userName: null,
       name: null,
       surname: null,
-        roleNames:[],
+      roleNames:[],
       sex: null,
       level: null,
       password: null,
@@ -231,20 +231,20 @@ const Header = () => {
                     <FormInput
                       key={inputs[0].id}
                       {...inputs[0]}
-                    value={values[inputs.name]}
+                      value={values[inputs.name]}
                       onChange={handleChange}
                     />
                     <FormInput
                       key={inputs[1].id}
                       {...inputs[1]}
-                    value={values[inputs.name]}
+                      value={values[inputs.name]}
                       onChange={handleChange}
                     />
                   <SelectMenu props={SelectInput1} onChange={handleChangeRole} />
                     <FormInput
                       key={inputs[2].id}
                       {...inputs[2]}
-                    value={values[inputs.name]}
+                     value={values[inputs.name]}
                       onChange={handleChange}
                     />
                   </div>
