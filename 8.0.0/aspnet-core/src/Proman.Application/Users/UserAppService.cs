@@ -88,6 +88,31 @@ namespace Proman.Users
             return MapToEntityDto(user);
         }
 
+        public async Task<UserDto> CreateClient(CreateUserDto input)
+        {
+            CheckCreatePermission();
+
+            var user = ObjectMapper.Map<User>(input);
+
+            user.TenantId = AbpSession.TenantId;
+            user.IsEmailConfirmed = true;
+            user.IsActive = true;
+            user.Type = Constants.Enum.StatusEnum.UserType.Client;
+
+            await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
+
+            CheckErrors(await _userManager.CreateAsync(user, input.Password));
+
+            if (input.RoleNames != null)
+            {
+                CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+            }
+
+            CurrentUnitOfWork.SaveChanges();
+
+            return MapToEntityDto(user);
+        }
+
         public override async Task<UserDto> UpdateAsync(UserDto input)
         {
             await _userServices.UpdateUserAsync(input);
@@ -339,6 +364,42 @@ namespace Proman.Users
             query = query.OrderByDescending(s => s.CreationTime);
             var temp = await query.GetGridResult(query, input);
             return new PagedResultDto<GetAllUserDto>(temp.TotalCount, temp.Items);
+        }
+
+        public async Task<PagedResultDto<GetAllClientDto>> GetAllClientPagging(GridParam input)
+        {
+            var qUserRoles = from ur in _workLimit.GetAll<UserRole>()
+                             join r in _workLimit.GetAll<Role, int>() on ur.RoleId equals r.Id
+                             select new
+                             {
+                                 ur.UserId,
+                                 RoleName = r.Name
+                             };
+
+
+            var query = from u in _workLimit.GetAll<User>()
+                        join ur in qUserRoles on u.Id equals ur.UserId into roles
+                        where u.Type == Constants.Enum.StatusEnum.UserType.Client
+                        select new GetAllClientDto
+                        {
+                            Id = u.Id,
+                            UserName = u.UserName,
+                            FullName = u.FullName,
+                            IsActive = u.IsActive,
+                            EmailAddress = u.EmailAddress,
+                            RoleId = _workLimit.GetAll<UserRole>().Where(s => s.UserId == u.Id).Select(s => s.RoleId).ToList(),
+                            RoleNames = _workLimit.GetAll<Role, int>()
+                            .Where(s => _workLimit.GetAll<UserRole>().Where(s => s.UserId == u.Id).Select(s => s.RoleId).ToList()
+                            .Contains(s.Id)).Select(s => s.Name).ToList(),
+                            Type = u.Type,
+                            Level = u.Level,
+                            UserCode = u.UserCode,
+                            Sex = u.Sex,
+                            CreationTime = u.CreationTime,
+                        };
+            query = query.OrderByDescending(s => s.CreationTime);
+            var temp = await query.GetGridResult(query, input);
+            return new PagedResultDto<GetAllClientDto>(temp.TotalCount, temp.Items);
         }
     }
 }
