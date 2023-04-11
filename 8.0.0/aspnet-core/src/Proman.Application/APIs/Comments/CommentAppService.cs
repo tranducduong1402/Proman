@@ -1,5 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.UI;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,13 +10,9 @@ using Proman.Entities;
 using Proman.IIoc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
 using System.IO;
-using static System.Net.WebRequestMethods;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Proman.APIs.Comments
 {
@@ -116,7 +114,7 @@ namespace Proman.APIs.Comments
                 PublicId = "comment/" + file.FileName
             };
 
-            var t =await _cloudinary.UploadAsync(uploadParams);
+            var t = await _cloudinary.UploadAsync(uploadParams);
             return Path.GetFileName(new Uri(t.Url.ToString()).AbsolutePath);
 
         }
