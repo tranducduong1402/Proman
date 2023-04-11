@@ -19,5 +19,6 @@
     <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.103.36" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.4.0" />
+    <PackageReference Include="CloudinaryDotNet" Version="1.20.0" />
   </ItemGroup>
 </Project>
