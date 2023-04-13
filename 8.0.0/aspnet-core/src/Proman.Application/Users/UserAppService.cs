@@ -10,13 +10,20 @@ using Abp.Linq.Extensions;
 using Abp.Localization;
 using Abp.Runtime.Session;
 using Abp.UI;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Proman.APIs.Comments.Dto;
 using Proman.Authorization;
 using Proman.Authorization.Roles;
 using Proman.Authorization.Users;
+using Proman.Constants;
 using Proman.DomainServices;
 using Proman.DomainServices.Dto;
+using Proman.Entities;
 using Proman.Extension;
 using Proman.IIoc;
 using Proman.Paging;
@@ -25,8 +32,10 @@ using Proman.Users.Dto;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Role = Proman.Authorization.Roles.Role;
 
 namespace Proman.Users
 {
@@ -41,6 +50,7 @@ namespace Proman.Users
         private readonly LogInManager _logInManager;
         private readonly IWorkLimit _workLimit;
         private readonly IUserServices _userServices;
+        private readonly Cloudinary _cloudinary;
 
         public UserAppService(
             IRepository<User, long> repository,
@@ -51,6 +61,7 @@ namespace Proman.Users
             IAbpSession abpSession,
             IWorkLimit workLimit,
             IUserServices userServices,
+            Cloudinary cloudinary,
             LogInManager logInManager)
             : base(repository)
         {
@@ -62,6 +73,7 @@ namespace Proman.Users
             _logInManager = logInManager;
             _workLimit = workLimit;
             _userServices = userServices;
+            _cloudinary = cloudinary;
         }
 
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
@@ -400,6 +412,31 @@ namespace Proman.Users
             query = query.OrderByDescending(s => s.CreationTime);
             var temp = await query.GetGridResult(query, input);
             return new PagedResultDto<GetAllClientDto>(temp.TotalCount, temp.Items);
+        }
+
+        private async Task<string> UploadImageAvatar(IFormFile file)
+        {
+            DateTime now = DateTime.Now;
+            string formattedDateTime = now.ToString("yyyyMMddHHmmss");
+            string newFilePath = Path.ChangeExtension(file.FileName, null) + "_" + formattedDateTime;
+            var uploadParams = new ImageUploadParams
+            {
+                File = new FileDescription(newFilePath, file.OpenReadStream()),
+                PublicId = "avatar/" + newFilePath
+            };
+
+            var t = await _cloudinary.UploadAsync(uploadParams);
+            return t.Url.AbsoluteUri;
+        }
+
+        [HttpPost]
+        public async Task<string> UploadAvatar([FromForm] AvatarDto input)
+        {
+            User user = await _userManager.GetUserByIdAsync(input.UserId);
+            string avatarPath = await UploadImageAvatar(input.File);
+            user.AvatarPath = avatarPath;
+            await _userManager.UpdateAsync(user);
+            return avatarPath;
         }
     }
 }

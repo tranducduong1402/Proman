@@ -108,14 +108,17 @@ namespace Proman.APIs.Comments
 
         private async Task<string> UploadImageComment(IFormFile file)
         {
+            DateTime now = DateTime.Now;
+            string formattedDateTime = now.ToString("yyyyMMddHHmmss");
+            string newFilePath = Path.ChangeExtension(file.FileName, null) + "_" + formattedDateTime;
             var uploadParams = new ImageUploadParams
             {
-                File = new FileDescription(file.FileName, file.OpenReadStream()),
-                PublicId = "comment/" + file.FileName
+                File = new FileDescription(newFilePath, file.OpenReadStream()),
+                PublicId = "comment/" + newFilePath
             };
 
             var t = await _cloudinary.UploadAsync(uploadParams);
-            return Path.GetFileName(new Uri(t.Url.ToString()).AbsolutePath);
+            return t.Url.AbsoluteUri;
 
         }
     }
