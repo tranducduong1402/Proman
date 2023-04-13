@@ -3,7 +3,7 @@ import React from "react";
 export const Breadcrumb = (props) => {
   return (
     <div>
-      <nav class="flex ml-8 my-2" aria-label="Breadcrumb">
+      <nav class="flex ml-8 my-2 mb-10" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
           {/* <li class="inline-flex items-center">
             <a
