@@ -7,11 +7,14 @@ import HomeScreen from './screens/Home/HomeScreen';
 import ResetPassword from './screens/SignUp/ResetScreen';
 import UserScreen from './screens/User/UserScreen';
 import RoleScreen from './screens/Role/RoleScreen';
+import RoleTree from './screens/Role/RoleTree';
 import ClientScreen from './screens/Client/ClientScreen';
 import TaskScreen from './screens/Task/TaskScreen';
 import ProjectDetail from './screens/Project/ProjectDetail';
+import Project from './screens/Project/Project';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import Position from './screens/Position/position';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +51,10 @@ const router = createBrowserRouter([
     path: "/role",
     element: <RoleScreen />,
   },
+  {
+    path: "/roletree",
+    element: <RoleTree />,
+  },
 
   {
     path: "/client",
@@ -60,8 +67,18 @@ const router = createBrowserRouter([
   },
 
   {
+    path: "/project",
+    element: <Project />,
+  },
+
+  {
     path: "/projectdetail",
     element: <ProjectDetail/>,
+  },
+
+  {
+    path: "/position",
+    element: <Position />,
   },
 ]);
 
