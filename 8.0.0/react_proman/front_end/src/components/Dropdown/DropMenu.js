@@ -21,21 +21,32 @@ const DropMenu = ({ options, id }) => {
               {options && (
                 <div className="text-[#334155] cursor-pointer mt-2">
                   <div
-                    className="rounded-sm flex  hover:bg-main_color h-[38px] hover:text-white"
-                    onClick={() => setStatus(!status)}
+                    className="rounded-sm flex  hover:bg-main_color h-[38px] hover:text-white w-full"
+                    onClick={() => {
+                      setStatus(!status);
+                      setOpen(!open);
+                    }}
                   >
                     <i class="fa-solid fa-eye mt-3 mx-3"></i>
                     <button className="text-[16px]"> View Detail </button>
                   </div>
                   <div
-                    className="rounded-sm flex  hover:bg-main_color h-[38px] hover:text-white"
-                    onClick={() => setStatus(!status)}
+                    className="rounded-sm flex  hover:bg-main_color h-[38px] hover:text-white w-full"
+                    onClick={() => {
+                      setStatus(!status);
+                      setOpen(!open)
+                    }}
                   >
                     <i class="fa-solid fa-pen-to-square mt-3 mx-3"></i>
                     <button className="text-[16px]">Edit</button>
                   </div>
-                  <div className="rounded-sm flex  hover:bg-main_color h-[38px] hover:text-white"
-                  onClick={() => setIsConfirm(!isConfirm)}
+                  <div
+                    className="rounded-sm flex  hover:bg-main_color h-[38px] hover:text-white w-full"
+                    onClick={() => {
+                      setIsConfirm(!isConfirm)
+                      setOpen(!open)
+                    }
+                    }
                   >
                     <i class="fa-solid fa-trash mt-3 mx-3"></i>
                     <button className="text-[16px]">Delete</button>

@@ -3,7 +3,7 @@ import Dropdown from '../../components/Dropdown/Dropdown'
 import Header from '../../components/Header/Header'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import UserScreen from '../User/UserScreen'
-import Kaban from '../../components/Kaban/Kaban'
+// import Kaban from '../../components/Kaban/Kaban'
 
 const HomeScreen = () => {
   const Admin = {
@@ -15,7 +15,7 @@ const HomeScreen = () => {
 }
   return (
     <div className='home'>
-      <Kaban/>
+      <Sidebar/>
     </div>
   )
 }

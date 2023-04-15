@@ -8,7 +8,6 @@ import UserScreen from "../../screens/User/UserScreen";
 import Dropdown from "../Dropdown/Dropdown";
 import Header from "../Header/Header";
 
-
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
   const [openDrop, setOpenDrop] = useState(true);
@@ -62,16 +61,14 @@ const Sidebar = () => {
           </h1>
         </div>
 
-        <div 
-        className=  { `${!open && "hidden"} origin-left duration-200 mt-9 `}>
-         Main Menu 
+        <div className={`${!open && "hidden"} origin-left duration-200 mt-9 `}>
+          Main Menu
         </div>
         <ul className="pt-4">
           {Menus.map((Menu, index) => (
             <li
               key={index}
-              className=
-              {`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 hover:bg-main_color hover:text-white`}
+              className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 hover:bg-main_color hover:text-white`}
             >
               <i className={`${Menu.src} pl-2`}> </i>
               <span
@@ -90,9 +87,9 @@ const Sidebar = () => {
           >
             <i class="fa-solid fa-user text-[#BDBDBD]  mx-2 text-[13px] my-auto "></i>
             <li
-              className={
-                `${
-                !open && "hidden"} origin-left duration-200 text-[#BDBDBD] text-[18px] flex font-normal ml-4
+              className={`${
+                !open && "hidden"
+              } origin-left duration-200 text-[#BDBDBD] text-[18px] flex font-normal ml-4
                 `}
             >
               <button>
@@ -106,7 +103,6 @@ const Sidebar = () => {
             </li>
           </div>
           <Dropdown data={Admin} />
-
 
           <div
             className="flex hover:bg-main_color rounded-md p-[5px] cursor-pointer mt-5"
@@ -129,48 +125,59 @@ const Sidebar = () => {
             </li>
           </div>
 
-          <div className={`${ Job.status && "hidden" }  text-black  ${ !Job.statusNav && "hidden" }` }>
+          <div
+            className={`${Job.status && "hidden"}  text-black  ${
+              !Job.statusNav && "hidden"
+            }`}
+          >
+            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 align-middle">
+              <li>
+                <Link to="/project">
+                  <h2 className="block px-4 py-2 hover:text-main_color font-semibold ">
+                    <span className="text-[20px] pr-5"> - </span>
+                    {Job.children1}
+                  </h2>
+                </Link>
+              </li>
+              <li>
+                <Link to="/task">
+                  <h2 className="block px-4 py-2 hover:text-main_color font-semibold ">
+                    <span className="text-[20px] pr-5"> - </span>
+                    {Job.children2}
+                  </h2>
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-          <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 align-middle">
-            <li >    
-            <Link to='/user'>
-            <h2 className="block px-4 py-2 hover:text-main_color font-semibold "> 
-            <span className='text-[20px] pr-5'> - </span>
-             { Job.children1}</h2>
-            </Link> 
-            </li>
-            <li>
-             <Link to='/user'>
-              <h2 className="block px-4 py-2 hover:text-main_color font-semibold "> 
-               <span className='text-[20px] pr-5'> - </span>
-                 { Job.children2}</h2>
-             </Link>      
-             </li>
-          </ul>
-         </div>
+          <li
+            className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 hover:bg-main_color mt-[10px]`}
+          >
+            <i class="fa-regular fa-pen-to-square pl-1"></i>
+            <span
+              className={`${
+                !open && "hidden"
+              } origin-left duration-200 text-[#BDBDBD] text-[18px]`}
+            >
+              {" "}
+              Review{" "}
+            </span>
+          </li>
 
-        <li  className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 hover:bg-main_color mt-[10px]`}>
-        <i class="fa-regular fa-pen-to-square pl-1"></i>
-         <span  className={`${
-            !open && "hidden"
-          } origin-left duration-200 text-[#BDBDBD] text-[18px]`}> Review </span>
-        </li>
-         
-
-        <li  className= { `${
-            !open && "hidden"
-          } origin-left duration-200 mt-9 `}>
-         <h2 className="text-[16px] mb-2"> Project Management </h2>
-         <h3 className=" text-[#828282] text-xs mb-2"> © 2023 All Rights Reserved </h3>
-         <h3 className=" text-colorText text-[14px]"> Made with 
-         <i class="fa-solid fa-heart text-red-600"></i>
-         </h3>
-        </li>
+          <li className={`${!open && "hidden"} origin-left duration-200 mt-9 `}>
+            <h2 className="text-[16px] mb-2"> Project Management </h2>
+            <h3 className=" text-[#828282] text-xs mb-2">
+              {" "}
+              © 2023 All Rights Reserved{" "}
+            </h3>
+            <h3 className=" text-colorText text-[14px]">
+              {" "}
+              Made with
+              <i class="fa-solid fa-heart text-red-600"></i>
+            </h3>
+          </li>
         </ul>
       </div>
-
-   
-      
     </div>
   );
 };
