@@ -80,5 +80,20 @@ namespace Proman.APIs.Positions
                 throw new UserFriendlyException(String.Format("Position Id {0} has user", input.Id));
             await WorkLimit.GetRepo<Position>().DeleteAsync(input.Id);
         }
+
+        [HttpGet]
+        public async Task<PositionDto> GetPositionById(EntityDto<long> input)
+        {
+            var query = await WorkLimit.GetAll<Position>()
+                .Where(s => s.Id == input.Id)
+                 .Select(s => new PositionDto { 
+                     Id = s.Id, 
+                     Name = s.Name, 
+                     ShortName = s.ShortName, 
+                     Code = s.Code, 
+                     Color = s.Color, 
+                 }).FirstOrDefaultAsync();
+            return query;
+        }
     }
 }

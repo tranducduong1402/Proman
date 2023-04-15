@@ -15,6 +15,7 @@ import Project from './screens/Project/Project';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import Position from './screens/Position/position';
+import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
     path: "/position",
     element: <Position />,
   },
+  {
+    path: "position/search/:keyword",
+    element: <Position />,
+  },
 ]);
 
 function App() {
@@ -96,6 +101,8 @@ function App() {
 
   return (
     <div className="App">
+      <ToastContainer  style={{display: 'inline-block'}}/>
+
       <RouterProvider router={router} />
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from "../Modal/Modal";
 import Confirm from "../Modal/Confirm";
 
-const DropMenu = ({ options, id }) => {
+const DropMenu = ({ options, id, name }) => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(false);
   const [isConfirm, setIsConfirm] = useState(false);
@@ -58,7 +58,7 @@ const DropMenu = ({ options, id }) => {
         ) : null}
       </div>
       {status && <Modal status={status} id={id} />}
-      {isConfirm && <Confirm confirm={isConfirm} id={id} />}
+      {isConfirm && <Confirm confirm={isConfirm} id={id} name = {name} />}
     </div>
   );
 };

@@ -349,6 +349,7 @@ namespace Proman.Users
                                  RoleName = r.Name
                              };
 
+
             var query = from u in _workLimit.GetAll<User>()
                         join ur in qUserRoles on u.Id equals ur.UserId into roles
                         select new GetAllUserDto
