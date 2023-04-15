@@ -1,7 +1,15 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { userCreateReducer, userDeleteReducer, userEditReducer, userListReducer, userLoginReducer, userRegisterReducer, userUpdateReducer } from "./Reducers/UserReducer";
+import {
+   userCreateReducer,
+   userDeleteReducer,
+    userEditReducer, 
+    userListReducer, 
+    userLoginReducer, 
+    userRegisterReducer, 
+    userUpdateReducer } from "./Reducers/UserReducer";
+import { positionCreateReducer, positionDeleteReducer, positionListReducer, positionUpdateReducer, postionDetailReducer, postionEditReducer } from "./Reducers/PositionReducer";
 
 const reducer = combineReducers({
     userLogin: userLoginReducer,
@@ -10,7 +18,12 @@ const reducer = combineReducers({
     adminCreate: userCreateReducer,
     userEdit: userEditReducer,
     userUpdate: userUpdateReducer,
-    userDelete: userDeleteReducer
+    userDelete: userDeleteReducer,
+    positionList: positionListReducer,
+    positionCreate: positionCreateReducer,
+    positionDelete: positionDeleteReducer,
+    positionDetail: postionDetailReducer,
+    positionUpdate: positionUpdateReducer
   });
 
 // login

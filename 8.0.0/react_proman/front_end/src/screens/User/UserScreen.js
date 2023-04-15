@@ -19,7 +19,7 @@ const UserScreen = () => {
 
   const userDelete = useSelector((state) => state.userDelete);
   const { error: errorDelete, success: successDelete } = userDelete;
-
+  
   const userUpdate = useSelector((state) => state.userUpdate);
 
   const {
@@ -64,7 +64,8 @@ const UserScreen = () => {
       <Sidebar />
       <div className="h-screen flex-1 p-7 bg-[#EEEFF3]">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <Header />
+          
+          <Header  name = { "user" }/>
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr className=" text-[13px] text-black font-bold">
@@ -171,7 +172,7 @@ const UserScreen = () => {
                         )}
                       </td>
                       <td className="px-6 py-8">
-                        <DropMenu options={options}  id ={item.id} />
+                        <DropMenu options={options}  id ={item.id} name = {"user"}  />
                       </td>
                     </tr>
                   ))}

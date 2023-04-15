@@ -7,7 +7,7 @@ import { createUser } from "../../Redux/Actions/UserAction";
 import { USER_CREATE_RESET } from "../../Redux/Constants/UserContants";
 import { useParams } from "react-router-dom";
 
-const Header = () => {
+const Header = ({name}) => {
   const [isOpen, setIsOpen] = useState(false);
   const modalRef = useRef(null);
   const handleClose = (event) => {
@@ -15,7 +15,7 @@ const Header = () => {
       setIsOpen(false);
     }
   };
-  
+  console.log(name)
   const inputs = [
     {
       id: 1,
@@ -187,12 +187,12 @@ const Header = () => {
     dispatch(createUser(values));
     setIsOpen(!isOpen)
   };
-
+console.log("name header", name)
   return (
     <div className=" mb-7 mx-5 mt-8">
       <div className="flex justify-between">
         <div>
-          <Search />
+          <Search namesearch = { name } />
         </div>
         <div className="">
           <button

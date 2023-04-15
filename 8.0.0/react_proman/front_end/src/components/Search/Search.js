@@ -3,7 +3,8 @@ import { useDispatch } from "react-redux";
 import {  useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
-const Search = () => {
+const Search = ({namesearch}) => {
+  console.log(namesearch)
   const [keyword, setKeyword] = useState();
   const params = useParams()
   const navigate = useNavigate();
@@ -11,9 +12,9 @@ const Search = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     if (keyword.trim()) {
-      navigate(`/user/search/${keyword}`);
+      navigate(`/${namesearch}/search/${keyword}`);
     } else {
-      navigate("/user");
+      navigate(`/${namesearch}`);
     }
   };
 
