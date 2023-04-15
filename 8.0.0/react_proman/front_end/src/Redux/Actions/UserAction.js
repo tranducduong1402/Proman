@@ -69,9 +69,14 @@ export const listUser = (keyword = "") => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(
-      `https://localhost:44311/api/services/app/User/GetAllPagging?SearchText=${keyword}`,
-      config
+    const { data } = await axios.post(
+      `https://localhost:44311/api/services/app/User/GetAllPaging`,{searchText: keyword,  filterItems: [
+        {
+          "propertyName": "isActive",
+          "value": "true",
+        }
+      ],},
+      config,
     );
 
     dispatch({ type: USER_LIST_SUCCESS, payload: data.result.items });

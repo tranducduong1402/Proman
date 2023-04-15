@@ -15,21 +15,21 @@ const Dropdown = ( { data }) => {
       </Link> 
       </li>
       <li>
-       <Link to='/user'>
+       <Link to='/role'>
         <h2 className="block px-4 py-2 hover:text-main_color font-semibold "> 
          <span className='text-[20px] pr-5'> - </span>
            { data.children2}</h2>
        </Link>      
        </li>
       <li>
-       <Link to='/login'>
+       <Link to='/client'>
          <h2 className="block px-4 py-2 hover:text-main_color font-semibold "> 
          <span className='text-[20px] pr-5'> - </span>
           { data.children3}</h2>
        </Link> 
       </li>
       <li>
-       <Link to='/login'>
+       <Link to='/position'>
          <h2 className="block px-4 py-2 hover:text-main_color font-semibold "> 
          <span className='text-[20px] pr-5'> - </span>
           { data.children4}</h2>

@@ -9,6 +9,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import avatar from "../../data/image/avatar.jpg";
 import { listUser } from "../../Redux/Actions/UserAction";
 import { useParams } from "react-router-dom";
+import Loading from "../../components/Loading/Loading";
 const UserScreen = () => {
   const dispatch = useDispatch();
   const keyword =useParams().keyword;
@@ -27,13 +28,36 @@ const UserScreen = () => {
     success: successUpdate,
   } = userUpdate;
 
-
-
   useEffect(() => {
     dispatch(listUser(keyword));
   }, [dispatch, successDelete, successUpdate, keyword]);
 
   const options = ["View", "Edit", "Delete"];
+
+  const data = [
+    {
+      id: '1',
+      name: "dev",
+      shortName: "dev",
+      code: "dev",
+    },
+    
+    {
+      id: '2',
+      name: "tester",
+      shortName: "tester",
+      code: "tester",
+    },
+    
+    {
+      id: '3',
+      name: "BA",
+      shortName: "BA",
+      code: "BA",
+    },
+    
+    
+  ];
 
   return (
     <div className="flex">
@@ -88,7 +112,7 @@ const UserScreen = () => {
             </thead>
             <tbody>
               {loading ? (
-                <div> loading ... </div>
+                <Loading/>
               ) :  (
                 <React.Fragment>
                   {users.map((item, index) => (
