@@ -338,7 +338,8 @@ namespace Proman.Users
                 }).ToListAsync();
         }
 
-        public async Task<PagedResultDto<GetAllUserDto>> GetAllPagging(GridParam input)
+        [HttpPost]
+        public async Task<GridResult<GetAllUserDto>> GetAllPaging(GridParam input)
         {
             var qUserRoles = from ur in _workLimit.GetAll<UserRole>()
                              join r in _workLimit.GetAll<Role, int>() on ur.RoleId equals r.Id
@@ -347,7 +348,6 @@ namespace Proman.Users
                                  ur.UserId,
                                  RoleName = r.Name
                              };
-
 
             var query = from u in _workLimit.GetAll<User>()
                         join ur in qUserRoles on u.Id equals ur.UserId into roles
@@ -370,12 +370,12 @@ namespace Proman.Users
                             PositionId = u.Position.Id,
                             PositionName = u.Position.Name
                         };
-            query = query.OrderByDescending(s => s.CreationTime);
-            var temp = await query.GetGridResult(query, input);
-            return new PagedResultDto<GetAllUserDto>(temp.TotalCount, temp.Items);
+
+            return await query.GetGridResult(query, input);
         }
 
-        public async Task<PagedResultDto<GetAllClientDto>> GetAllClientPagging(GridParam input)
+        [HttpPost]
+        public async Task<GridResult<GetAllClientDto>> GetAllClientPaging(GridParam input)
         {
             var qUserRoles = from ur in _workLimit.GetAll<UserRole>()
                              join r in _workLimit.GetAll<Role, int>() on ur.RoleId equals r.Id
@@ -406,9 +406,8 @@ namespace Proman.Users
                             Sex = u.Sex,
                             CreationTime = u.CreationTime,
                         };
-            query = query.OrderByDescending(s => s.CreationTime);
-            var temp = await query.GetGridResult(query, input);
-            return new PagedResultDto<GetAllClientDto>(temp.TotalCount, temp.Items);
+
+            return await query.GetGridResult(query, input);
         }
 
         private async Task<string> UploadImageAvatar(IFormFile file)
