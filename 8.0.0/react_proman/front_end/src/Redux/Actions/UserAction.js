@@ -58,7 +58,7 @@ export const login = (userNameOrEmailAddress, password) => async (dispatch) => {
 export const listUser = (keyword = "", listFilter ) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_LIST_REQUEST });
-    console.log(listFilter)
+    
     const {
       userLogin: { userInfo },
     } = getState();

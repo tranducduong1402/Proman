@@ -8,7 +8,7 @@ import { USER_CREATE_RESET } from "../../Redux/Constants/UserContants";
 import { useNavigate, useParams } from "react-router-dom";
 import SelectFilter from "../SelectedMenu/SelectFilter";
 
-const Header = ({name, sendDataToParent}) => {
+const Header = ({ name, sendDataToParent }) => {
   const [isOpen, setIsOpen] = useState(false);
   const modalRef = useRef(null);
   const handleClose = (event) => {
@@ -69,21 +69,7 @@ const Header = ({name, sendDataToParent}) => {
     },
   ];
   const filter = [
-    {
-      name: "Role Names",
-      title: "roleNames",
-      default: "All",
-      options: [
-        {
-          name: "Basic User",
-          value: "Basic User",
-        },
-        {
-          name: "Admin",
-          value: "Admin",
-        },
-      ],
-    },
+  
     {
       name: "Type",
       title: "type",
@@ -140,6 +126,14 @@ const Header = ({name, sendDataToParent}) => {
       ],
     },
 
+    {
+      name: "Clear Filter",
+      title: "roleNames",
+      default: "All",
+      options: [
+       
+      ],
+    },
   ];
 
   const SelectInput1 = {
@@ -157,7 +151,7 @@ const Header = ({name, sendDataToParent}) => {
       },
     ],
   };
-  
+
   const SelectInput2 = [
     {
       name: "Gender",
@@ -215,17 +209,26 @@ const Header = ({name, sendDataToParent}) => {
     sex: null,
     isActive: null,
     type: null,
-  })
+  });
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
- 
-  const handleFilter = (e) => {
-    setValueFilter({ ...valueFilter, [e.target.name]: e.target.value });
-    sendDataToParent(pre => ({ ...pre, [e.target.name]: e.target.value}))
-  };
 
+  const handleFilter = async (e) => {
+    setValueFilter({ ...valueFilter, [e.target.name]: e.target.value });
+    if (e.target.value === "All")
+      sendDataToParent((prev) =>
+        Object.keys(prev)
+          .filter((key) => key.includes(!e.target.name))
+          .reduce((obj, key) => {
+            obj[key] = prev[key];
+            return obj;
+          }, {})
+      );
+    else
+      sendDataToParent((pre) => ({ ...pre, [e.target.name]: e.target.value }));
+  };
   const handleChangeRole = (e) => {
     setValues({ ...values, [e.target.name]: [e.target.value] });
   };
@@ -248,18 +251,18 @@ const Header = ({name, sendDataToParent}) => {
         emailAddress: null,
       });
     }
-  }, [ dispatch]);
+  }, [dispatch]);
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(createUser(values));
-    setIsOpen(!isOpen)
+    setIsOpen(!isOpen);
   };
 
   return (
     <div className=" mb-7 mx-5 mt-8">
       <div className="flex justify-between">
         <div>
-          <Search namesearch = { name } />
+          <Search namesearch={name} />
         </div>
         <div className="">
           <button
@@ -274,7 +277,12 @@ const Header = ({name, sendDataToParent}) => {
       <div className=" flex justify-between mt-7">
         {filter.map((item) => (
           <div className="w-[230px]">
-            <SelectFilter props={item} key={item.id} onChange={handleFilter} value={values[item.title]}/>
+            <SelectFilter
+              props={item}
+              key={item.id}
+              onChange={handleFilter}
+              value={values[item.title]}
+            />
           </div>
         ))}
       </div>
@@ -332,11 +340,11 @@ const Header = ({name, sendDataToParent}) => {
                       onChange={handleChange}
                     />
                     {SelectInput2.map((item) => (
-                      <SelectMenu 
-                       props={item}
-                       onChange={handleChange}
-                       value={values[item.title]}
-                        />
+                      <SelectMenu
+                        props={item}
+                        onChange={handleChange}
+                        value={values[item.title]}
+                      />
                     ))}
                   </div>
                 </div>
