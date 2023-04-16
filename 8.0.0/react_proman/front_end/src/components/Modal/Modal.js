@@ -128,6 +128,7 @@ const Modal = ({ status, id }) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
   const userUpdate = useSelector((state) => state.userUpdate);
+
   const {
     loading: loadingUpdate,
     error: errorUpdate,
@@ -150,7 +151,7 @@ const Modal = ({ status, id }) => {
       emailAddress: user.emailAddress,
     });
   }, [dispatch, id]);
-  console.log(id)
+
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
@@ -161,7 +162,6 @@ const Modal = ({ status, id }) => {
     );
   };
 
-console.log(values["sex"])
   return (
     <div>
       {isOpen && (
@@ -177,8 +177,7 @@ console.log(values["sex"])
               <div className="w-[820px] h-[500px]">
                 <div>
                   <h2 className="text-[18px] text-black font-bold mb-5 ">
-                    {" "}
-                    Edit{" "}
+                    Edit
                   </h2>
                   <div className="flex justify-around">
                     <div className=" w-[320px]">
@@ -209,7 +208,10 @@ console.log(values["sex"])
                         onChange={handleChange}
                       />
                       {SelectInput2.map((item) => (
-                        <SelectMenu props={item} value={values[item.title]}  onChange={handleChange} />
+                        <SelectMenu 
+                        props={item} 
+                        value={values[item.title]}  
+                        onChange={handleChange} />
                       ))}
                     </div>
                   </div>

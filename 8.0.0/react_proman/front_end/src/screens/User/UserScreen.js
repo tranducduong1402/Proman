@@ -10,16 +10,24 @@ import avatar from "../../data/image/avatar.jpg";
 import { listUser } from "../../Redux/Actions/UserAction";
 import { useParams } from "react-router-dom";
 import Loading from "../../components/Loading/Loading";
+
 const UserScreen = () => {
+  const [dataFilter, setDataFilter] = useState([]);
+  const listFilter = Object.entries(dataFilter).map((filter) => ({
+    propertyName: filter[0],
+    value: filter[1],
+    comparison: 0,
+  }));
+
   const dispatch = useDispatch();
-  const keyword =useParams().keyword;
-  console.log(keyword)
+  const keyword = useParams().keyword;
+
   const userList = useSelector((state) => state.userList);
   const { loading, error, users } = userList;
 
   const userDelete = useSelector((state) => state.userDelete);
   const { error: errorDelete, success: successDelete } = userDelete;
-  
+
   const userUpdate = useSelector((state) => state.userUpdate);
 
   const {
@@ -28,44 +36,65 @@ const UserScreen = () => {
     success: successUpdate,
   } = userUpdate;
 
+  const userCreate = useSelector((state) => state.adminCreate);
+  const { error: errorCreate, success: successCreate } = userCreate;
+
+  // call api get all user
   useEffect(() => {
-    dispatch(listUser(keyword));
-  }, [dispatch, successDelete, successUpdate, keyword]);
+    dispatch(listUser(keyword, listFilter));
+  }, [dispatch, successDelete, successUpdate, keyword, successCreate, dataFilter]);
 
   const options = ["View", "Edit", "Delete"];
 
-  const data = [
-    {
-      id: '1',
-      name: "dev",
-      shortName: "dev",
-      code: "dev",
-    },
-    
-    {
-      id: '2',
-      name: "tester",
-      shortName: "tester",
-      code: "tester",
-    },
-    
-    {
-      id: '3',
-      name: "BA",
-      shortName: "BA",
-      code: "BA",
-    },
-    
-    
-  ];
+  // render value input
+  const renderType = (value) => {
+    let name = null;
+    switch (value) {
+      case 0: {
+        return (name = "Staff");
+      }
+      case 1: {
+        return (name = "Internship ");
+      }
+      case 2: {
+        return (name = "Collaborators  ");
+      }
+      case 3: {
+        return (name = "ProbationaryStaff  ");
+      }
+
+      case 4: {
+        return (name = "Client  ");
+      }
+    }
+  };
+
+  const renderSex = (value) => {
+    let name = null;
+    switch (value) {
+      case 0: {
+        return (name = "Male");
+      }
+      case 1: {
+        return (name = "FeMale ");
+      }
+      default:
+        return (name = null);
+    }
+  };
+
+  // filter
+  const handleDataFilter = (value) => {
+    setDataFilter(value);
+  };
 
   return (
     <div className="flex">
       <Sidebar />
       <div className="h-screen flex-1 p-7 bg-[#EEEFF3]">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          
-          <Header  name = { "user" }/>
+          <Header name={"user"} sendDataToParent={handleDataFilter} />
+
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr className=" text-[13px] text-black font-bold">
@@ -113,8 +142,8 @@ const UserScreen = () => {
             </thead>
             <tbody>
               {loading ? (
-                <Loading/>
-              ) :  (
+                <Loading />
+              ) : (
                 <React.Fragment>
                   {users.map((item, index) => (
                     <tr
@@ -157,8 +186,8 @@ const UserScreen = () => {
                       </th>
                       <td className="px-6 py-4">{item.positionName}</td>
 
-                      <td className="px-6 py-4">Staff</td>
-                      <td className="px-6 py-4">Male</td>
+                      <td className="px-6 py-4">{renderType(item.type)}</td>
+                      <td className="px-6 py-4">{renderSex(item.sex)}</td>
                       <td className="px-6 py-4">{item.roleNames}</td>
                       <td className="px-6 py-8">
                         {item.isActive ? (
@@ -172,7 +201,11 @@ const UserScreen = () => {
                         )}
                       </td>
                       <td className="px-6 py-8">
-                        <DropMenu options={options}  id ={item.id} name = {"user"}  />
+                        <DropMenu
+                          options={options}
+                          id={item.id}
+                          name={"user"}
+                        />
                       </td>
                     </tr>
                   ))}

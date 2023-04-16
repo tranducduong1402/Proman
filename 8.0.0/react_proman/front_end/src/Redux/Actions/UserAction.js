@@ -55,10 +55,10 @@ export const login = (userNameOrEmailAddress, password) => async (dispatch) => {
 };
 
 // ALL USER
-export const listUser = (keyword = "") => async (dispatch, getState) => {
+export const listUser = (keyword = "", listFilter ) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_LIST_REQUEST });
-
+    console.log(listFilter)
     const {
       userLogin: { userInfo },
     } = getState();
@@ -70,12 +70,7 @@ export const listUser = (keyword = "") => async (dispatch, getState) => {
     };
 
     const { data } = await axios.post(
-      `https://localhost:44311/api/services/app/User/GetAllPaging`,{searchText: keyword,  filterItems: [
-        {
-          "propertyName": "isActive",
-          "value": "true",
-        }
-      ],},
+      `https://localhost:44311/api/services/app/User/GetAllPaging`,{ searchText: keyword, filterItems: listFilter },
       config,
     );
 
@@ -128,7 +123,7 @@ export const createUser =
     surname,
     roleNames,
     sex,
-    level,
+    type,
     password,
     emailAddress,
   }) =>
@@ -150,7 +145,7 @@ export const createUser =
           surname,
           roleNames,
           sex,
-          level,
+          type,
           password,
           emailAddress,
         },
@@ -199,9 +194,6 @@ export const editUser = (id) => async (dispatch, getState) => {
     });
   }
 };
-
-
-
 
 // UPDATE USER
 export const updateUser = (user) => async (dispatch, getState) => {
