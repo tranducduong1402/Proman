@@ -4,9 +4,7 @@ import {  useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
 const Search = ({namesearch}) => {
-  console.log(namesearch)
   const [keyword, setKeyword] = useState();
-  const params = useParams()
   const navigate = useNavigate();
   
   const submitHandler = (e) => {

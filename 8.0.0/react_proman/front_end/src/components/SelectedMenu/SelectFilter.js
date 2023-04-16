@@ -1,7 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const SelectMenu = ({ props, onChange, value }) => {
-  console.log(value)
+const SelectFilter = ({ props, onChange, value }) => {  
+
   return (
     <div className="mb-3">
       <label
@@ -30,4 +31,4 @@ const SelectMenu = ({ props, onChange, value }) => {
   );
 };
 
-export default SelectMenu;
+export default SelectFilter;

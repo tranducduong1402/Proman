@@ -5,9 +5,10 @@ import SelectMenu from "../SelectedMenu/SelectMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser } from "../../Redux/Actions/UserAction";
 import { USER_CREATE_RESET } from "../../Redux/Constants/UserContants";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import SelectFilter from "../SelectedMenu/SelectFilter";
 
-const Header = ({name}) => {
+const Header = ({name, sendDataToParent}) => {
   const [isOpen, setIsOpen] = useState(false);
   const modalRef = useRef(null);
   const handleClose = (event) => {
@@ -15,7 +16,7 @@ const Header = ({name}) => {
       setIsOpen(false);
     }
   };
-  console.log(name)
+
   const inputs = [
     {
       id: 1,
@@ -69,25 +70,76 @@ const Header = ({name}) => {
   ];
   const filter = [
     {
-      title: "Position",
+      name: "Role Names",
+      title: "roleNames",
       default: "All",
-      options: ["Dev", "Tester", "BA", "Ux Ui"],
+      options: [
+        {
+          name: "Basic User",
+          value: "Basic User",
+        },
+        {
+          name: "Admin",
+          value: "Admin",
+        },
+      ],
     },
     {
-      title: "Level",
+      name: "Type",
+      title: "type",
       default: "All",
-      options: ["Intern", "Staff", "Fresher", "Junior", "PM"],
+      options: [
+        {
+          value: 1,
+          name: "Intern",
+        },
+        {
+          value: 0,
+          name: "Staff",
+        },
+        {
+          value: 2,
+          name: "Collaborators",
+        },
+        {
+          value: 3,
+          name: "ProbationaryStaff ",
+        },
+      ],
     },
+
     {
-      title: "User Type",
+      name: "Gender",
+      title: "sex",
       default: "All",
-      options: ["Basic User", "Admin", "Super Admin"],
+      options: [
+        {
+          name: "Male",
+          value: 0,
+        },
+        {
+          name: "FeMale",
+          value: 1,
+        },
+      ],
     },
+
     {
-      title: "Active",
+      name: "Active",
+      title: "isActive",
       default: "All",
-      options: ["Active", "DeActive"],
+      options: [
+        {
+          name: "Active",
+          value: true,
+        },
+        {
+          name: "DeActive",
+          value: false,
+        },
+      ],
     },
+
   ];
 
   const SelectInput1 = {
@@ -105,6 +157,7 @@ const Header = ({name}) => {
       },
     ],
   };
+  
   const SelectInput2 = [
     {
       name: "Gender",
@@ -151,35 +204,49 @@ const Header = ({name}) => {
     userName: null,
     name: null,
     surname: null,
-    roleNames:[],
+    roleNames: [],
     sex: null,
-    level: null,
+    type: null,
     password: null,
-    emailAddress: null
+    emailAddress: null,
   });
+
+  const [valueFilter, setValueFilter] = useState({
+    sex: null,
+    isActive: null,
+    type: null,
+  })
+
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-  const handleChangeRole = (e) => {
-    setValues({ ...values, [e.target.name]: [e.target.value]});
+ 
+  const handleFilter = (e) => {
+    setValueFilter({ ...valueFilter, [e.target.name]: e.target.value });
+    sendDataToParent(pre => ({ ...pre, [e.target.name]: e.target.value}))
   };
+
+  const handleChangeRole = (e) => {
+    setValues({ ...values, [e.target.name]: [e.target.value] });
+  };
+
   const dispatch = useDispatch();
   const adminCreate = useSelector((state) => state.adminCreate);
   const { loading, error, user } = adminCreate;
-  
+
   useEffect(() => {
     if (user) {
       dispatch({ type: USER_CREATE_RESET });
-    setValues({
-      userName: null,
-      name: null,
-      surname: null,
-      roleNames:[],
-      sex: null,
-      level: null,
-      password: null,
-        emailAddress: null
-      })
+      setValues({
+        userName: null,
+        name: null,
+        surname: null,
+        roleNames: [],
+        sex: null,
+        type: null,
+        password: null,
+        emailAddress: null,
+      });
     }
   }, [ dispatch]);
   const submitHandler = (e) => {
@@ -187,7 +254,7 @@ const Header = ({name}) => {
     dispatch(createUser(values));
     setIsOpen(!isOpen)
   };
-console.log("name header", name)
+
   return (
     <div className=" mb-7 mx-5 mt-8">
       <div className="flex justify-between">
@@ -207,7 +274,7 @@ console.log("name header", name)
       <div className=" flex justify-between mt-7">
         {filter.map((item) => (
           <div className="w-[230px]">
-            <SelectMenu props={item} />
+            <SelectFilter props={item} key={item.id} onChange={handleFilter} value={values[item.title]}/>
           </div>
         ))}
       </div>
@@ -217,15 +284,14 @@ console.log("name header", name)
           className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81]"
           onClick={handleClose}
         >
-            <div
-              className="bg-[#FFFFFF] p-8 rounded-lg shadow-lg "
-              ref={modalRef}
-            >
-              <div className="w-[820px] h-[500px]">
-                <h2 className="text-[18px] text-black font-bold mb-5 ">
-                  {" "}
-                  Add new user{" "}
-                </h2>
+          <div
+            className="bg-[#FFFFFF] p-8 rounded-lg shadow-lg "
+            ref={modalRef}
+          >
+            <div className="w-[820px] h-[500px]">
+              <h2 className="text-[18px] text-black font-bold mb-5 ">
+                Add new user
+              </h2>
               <form onSubmit={submitHandler}>
                 <div className="flex justify-around">
                   <div className=" w-[320px]">
@@ -241,11 +307,14 @@ console.log("name header", name)
                       value={values[inputs.name]}
                       onChange={handleChange}
                     />
-                  <SelectMenu props={SelectInput1} onChange={handleChangeRole} />
+                    <SelectMenu
+                      props={SelectInput1}
+                      onChange={handleChangeRole}
+                    />
                     <FormInput
                       key={inputs[2].id}
                       {...inputs[2]}
-                     value={values[inputs.name]}
+                      value={values[inputs.name]}
                       onChange={handleChange}
                     />
                   </div>
@@ -253,17 +322,21 @@ console.log("name header", name)
                     <FormInput
                       key={inputs[4].id}
                       {...inputs[4]}
-                    value={values[inputs.name]}
+                      value={values[inputs.name]}
                       onChange={handleChange}
                     />
                     <FormInput
                       key={inputs[3].id}
                       {...inputs[3]}
-                    value={values[inputs.name]}
+                      value={values[inputs.name]}
                       onChange={handleChange}
                     />
                     {SelectInput2.map((item) => (
-                      <SelectMenu props={item} onChange={handleChange} />
+                      <SelectMenu 
+                       props={item}
+                       onChange={handleChange}
+                       value={values[item.title]}
+                        />
                     ))}
                   </div>
                 </div>
@@ -271,20 +344,19 @@ console.log("name header", name)
                   <button
                     className="text-black bg-[#EEEFF3] px-4 py-2 rounded-lg mr-8 text-[15px] hover:opacity-80"
                     onClick={() => setIsOpen(!isOpen)}
-
                   >
                     Cancel
                   </button>
-                   <button className="text-white bg-main_color px-5 py-2 rounded-lg  text-[15px] hover:opacity-90"
-
-                    type="submit"                   
+                  <button
+                    className="text-white bg-main_color px-5 py-2 rounded-lg  text-[15px] hover:opacity-90"
+                    type="submit"
                   >
                     Save
                   </button>
                 </div>
               </form>
-              </div>
             </div>
+          </div>
         </div>
       )}
     </div>
