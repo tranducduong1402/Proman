@@ -6,9 +6,15 @@ import {
     POSITION_DELETE_FAIL,
     POSITION_DELETE_REQUEST,
     POSITION_DELETE_SUCCESS,
+    POSITION_EDIT_FAIL,
+    POSITION_EDIT_REQUEST,
+    POSITION_EDIT_SUCCESS,
     POSITION_LIST_FAIL,
     POSITION_LIST_REQUEST,
-    POSITION_LIST_SUCCESS
+    POSITION_LIST_SUCCESS,
+    POSITION_UPDATE_FAIL,
+    POSITION_UPDATE_REQUEST,
+    POSITION_UPDATE_SUCCESS
 } from "../Constants/PositionContants";
 
 // ALL POSITION
@@ -87,35 +93,71 @@ export const createPosition =
             }
         };
 
-//   // Detail position
-//   export const editUser = (id) => async (dispatch, getState) => {
-//     try {
-//       dispatch({ type: USER_EDIT_REQUEST });
+  // Detail position
+  export const detailPosition = (id) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: POSITION_EDIT_REQUEST });
   
-//       const {
-//         userLogin: { userInfo },
-//       } = getState();
+      const {
+        userLogin: { userInfo },
+      } = getState();
   
-//       const config = {
-//         headers: {
-//           Authorization: `Bearer ${userInfo.result.accessToken}`,
-//         },
-//       };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.result.accessToken}`,
+        },
+      };
   
-//       const { data } = await axios.get(`https://localhost:44311/api/services/app/User/Get?Id=${id}`, config);
-//       dispatch({ type: USER_EDIT_SUCCESS, payload: data.result });
-//     } catch (error) {
-//       const message =
-//         error.response && error.response.data.message
-//           ? error.response.data.message
-//           : error.message;
+      const { data } = await axios.get(`https://localhost:44311/api/services/app/Position/GetPositionById?Id=${id}`, config);
+      dispatch({ type: POSITION_EDIT_SUCCESS, payload: data.result });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
       
-//       dispatch({
-//         type: USER_EDIT_FAIL,
-//         payload: message,
-//       });
-//     }
-//   };
+      dispatch({
+        type: POSITION_EDIT_FAIL,
+        payload: message,
+      });
+    }
+  };
+
+  // UPDATE Position
+export const updatePosition = (position) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: POSITION_UPDATE_REQUEST });
+  
+      const {
+        userLogin: { userInfo },
+      } = getState();
+      
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.result.accessToken}`,
+        },
+      };
+  
+      const { data } = await axios.put(
+        `https://localhost:44311/api/services/app/Position/Update`,
+        position,
+        config
+      );
+  
+      dispatch({ type: POSITION_UPDATE_SUCCESS, payload: data });
+      dispatch({ type: POSITION_EDIT_SUCCESS, payload: data });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({
+        type: POSITION_UPDATE_FAIL,
+        payload: message,
+      });
+    }
+  };
 
 // DELETE Position
 export const deletePosition = (id) => async (dispatch, getState) => {

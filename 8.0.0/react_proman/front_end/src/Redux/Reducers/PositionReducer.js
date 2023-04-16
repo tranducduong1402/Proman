@@ -53,7 +53,7 @@ export const positionCreateReducer = (state = {}, action) => {
 
   // EDIT Position
 export const postionDetailReducer = (
-    state = { user:{} },
+    state = { position:{} },
     action
   ) => {
     switch (action.type) {
