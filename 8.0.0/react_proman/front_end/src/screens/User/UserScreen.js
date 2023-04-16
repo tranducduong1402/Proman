@@ -13,7 +13,6 @@ import Loading from "../../components/Loading/Loading";
 
 const UserScreen = () => {
   const [dataFilter, setDataFilter] = useState([]);
-  console.log("data cua filter la",dataFilter)
   const listFilter = Object.entries(dataFilter).map((filter) => ({
     propertyName: filter[0],
     value: filter[1],

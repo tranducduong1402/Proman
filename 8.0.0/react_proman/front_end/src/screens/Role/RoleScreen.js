@@ -15,9 +15,6 @@ const RoleScreen = () => {
   const roleList = useSelector((state) => state.roleList);
 
   const { error, loading, roles } = roleList;
-  console.log("ABC", roles);
-
-
 
   useEffect(() => {
     dispatch(listRole());

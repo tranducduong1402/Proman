@@ -95,7 +95,6 @@ function App() {
 
   useEffect(() => {
     if (userInfo ) {
-      console.log('cos user r')
     }
   }, [dispatch, userInfo]);
 

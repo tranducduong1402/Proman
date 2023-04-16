@@ -1,7 +1,6 @@
 import React from "react";
 
 const SelectMenu = ({ props, onChange, value }) => {
-  console.log(value)
   return (
     <div className="mb-3">
       <label

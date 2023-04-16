@@ -8,6 +8,7 @@ import { listPosition } from "../../Redux/Actions/PositionAction";
 import { useParams } from "react-router-dom";
 import Loading from "../../components/Loading/Loading";
 import PositionHeader from "../../components/Header/PositionHeader";
+import DropMenuPosition from "../../components/Dropdown/DropMenuPosition";
 const Position = () => {
   const dispatch = useDispatch();
   const keyword = useParams().keyword;
@@ -22,12 +23,14 @@ const Position = () => {
   const positionDelete = useSelector((state) => state.positionDelete);
   const { error: errorDelete, success: successDelete } = positionDelete;
 
+  const positionUpdate = useSelector((state) => state.positionUpdate);
+  const { error: errorUpdate, success: successUpdate } = positionUpdate;
+
   useEffect(() => {
     dispatch(listPosition(keyword));
-  }, [dispatch, successCreate, successDelete, keyword]);
+  }, [dispatch, successCreate, successDelete, successUpdate, keyword]);
 
   const options = ["View", "Edit", "Delete"];
-  console.log(positions)
   return (
     <div className="flex">
       <Sidebar />
@@ -75,7 +78,8 @@ const Position = () => {
                       <td className="px-6 py-4">{item.code}</td>
                       <td className="px-6 py-4">{item.color}</td>
                       <td className="px-10 py-8 text-center">
-                        <DropMenu options={options} id ={item.id} name = {"position"}/>
+                        <DropMenuPosition
+                         options={options} id ={item.id} name = {"position"}/>
                       </td>
                     </tr>
                   ))}
