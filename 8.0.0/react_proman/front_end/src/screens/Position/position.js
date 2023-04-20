@@ -27,7 +27,6 @@ const Position = () => {
   }, [dispatch, successCreate, successDelete, keyword]);
 
   const options = ["View", "Edit", "Delete"];
-  console.log(positions)
   return (
     <div className="flex">
       <Sidebar />

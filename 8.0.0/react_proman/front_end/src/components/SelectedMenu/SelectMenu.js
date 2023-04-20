@@ -1,7 +1,6 @@
 import React from "react";
 
 const SelectMenu = ({ props, onChange, value }) => {
-  console.log(value)
   return (
     <div className="mb-3">
       <label
@@ -23,7 +22,7 @@ const SelectMenu = ({ props, onChange, value }) => {
       >
         <option> {props.default} </option>
         {props.options.map((option) => (
-          <option value={option.value}> {option.name} </option>
+          <option value={option.value} key={option.name}> {option.name} </option>
         ))}
       </select>
     </div>
