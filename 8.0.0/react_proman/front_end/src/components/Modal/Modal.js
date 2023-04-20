@@ -5,7 +5,7 @@ import FormInput from "../FormInput/FormInput";
 import SelectMenu from "../SelectedMenu/SelectMenu";
 import { editUser, updateUser } from "../../Redux/Actions/UserAction";
 
-const Modal = ({ status, id }) => {
+const Modal = ({ status, id, setStatus, setMenu}) => {
   const [isOpen, setIsOpen] = useState(status);
   const modalRef = useRef(null);
   const handleClose = (event) => {
@@ -139,6 +139,7 @@ const Modal = ({ status, id }) => {
     if (successUpdate) {
       dispatch({ type: USER_UPDATE_RESET });
     }
+    
     dispatch(editUser(id));
 
     setValues({
@@ -150,7 +151,7 @@ const Modal = ({ status, id }) => {
       level: user.level,
       emailAddress: user.emailAddress,
     });
-  }, [dispatch, id]);
+  }, [dispatch, id, successUpdate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -209,6 +210,7 @@ const Modal = ({ status, id }) => {
                       />
                       {SelectInput2.map((item) => (
                         <SelectMenu 
+                        key={item.id}
                         props={item} 
                         value={values[item.title]}  
                         onChange={handleChange} />
@@ -220,7 +222,13 @@ const Modal = ({ status, id }) => {
                 <div className=" flex justify-end mr-5 mt-20">
                   <button
                     className="text-black bg-[#EEEFF3] px-4 py-2 rounded-lg mr-8 text-[15px] hover:opacity-80"
-                    onClick={() => setIsOpen(!isOpen)}
+                    onClick={() => {
+                      setIsOpen(!isOpen);
+                      setStatus(false);
+                      setMenu(false)
+
+                    }
+                    }
                   >
                     Cancel
                   </button>

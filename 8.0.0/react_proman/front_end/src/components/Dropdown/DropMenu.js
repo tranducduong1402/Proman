@@ -6,6 +6,7 @@ const DropMenu = ({ options, id, name }) => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(false);
   const [isConfirm, setIsConfirm] = useState(false);
+
   return (
     <div>
       <div class="relative inline-block text-left">
@@ -24,7 +25,6 @@ const DropMenu = ({ options, id, name }) => {
                     className="rounded-sm flex  hover:bg-main_color h-[38px] hover:text-white w-full"
                     onClick={() => {
                       setStatus(!status);
-                      setOpen(!open);
                     }}
                   >
                     <i class="fa-solid fa-eye mt-3 mx-3"></i>
@@ -34,7 +34,7 @@ const DropMenu = ({ options, id, name }) => {
                     className="rounded-sm flex  hover:bg-main_color h-[38px] hover:text-white w-full"
                     onClick={() => {
                       setStatus(!status);
-                      setOpen(!open)
+                      setOpen(!open);
                     }}
                   >
                     <i class="fa-solid fa-pen-to-square mt-3 mx-3"></i>
@@ -43,10 +43,9 @@ const DropMenu = ({ options, id, name }) => {
                   <div
                     className="rounded-sm flex  hover:bg-main_color h-[38px] hover:text-white w-full"
                     onClick={() => {
-                      setIsConfirm(!isConfirm)
-                      setOpen(!open)
-                    }
-                    }
+                      setIsConfirm(!isConfirm);
+                      setOpen(!open);
+                    }}
                   >
                     <i class="fa-solid fa-trash mt-3 mx-3"></i>
                     <button className="text-[16px]">Delete</button>
@@ -57,8 +56,15 @@ const DropMenu = ({ options, id, name }) => {
           </div>
         ) : null}
       </div>
-      {status && <Modal status={status} id={id} />}
-      {isConfirm && <Confirm confirm={isConfirm} id={id} name = {name} />}
+      {status && (
+        <Modal
+          status={status}
+          id={id}
+          setStatus={setStatus}
+          setMenu={setOpen}
+        />
+      )}
+      {isConfirm && <Confirm confirm={isConfirm} id={id} name={name} />}
     </div>
   );
 };

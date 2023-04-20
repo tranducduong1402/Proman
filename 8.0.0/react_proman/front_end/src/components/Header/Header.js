@@ -5,7 +5,6 @@ import SelectMenu from "../SelectedMenu/SelectMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser } from "../../Redux/Actions/UserAction";
 import { USER_CREATE_RESET } from "../../Redux/Constants/UserContants";
-import { useNavigate, useParams } from "react-router-dom";
 import SelectFilter from "../SelectedMenu/SelectFilter";
 
 const Header = ({ name, sendDataToParent }) => {
