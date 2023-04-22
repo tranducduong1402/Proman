@@ -4,8 +4,10 @@ import { USER_UPDATE_RESET } from "../../Redux/Constants/UserContants";
 import FormInput from "../FormInput/FormInput";
 import SelectMenu from "../SelectedMenu/SelectMenu";
 import { editUser, updateUser } from "../../Redux/Actions/UserAction";
+import Loading from "../Loading/Loading";
+import axios from "axios";
 
-const Modal = ({ status, id, setStatus, setMenu}) => {
+const Modal = ({ status, id, setStatus, setMenu }) => {
   const [isOpen, setIsOpen] = useState(status);
   const modalRef = useRef(null);
   const handleClose = (event) => {
@@ -65,7 +67,7 @@ const Modal = ({ status, id, setStatus, setMenu}) => {
     },
   ];
   const SelectInput1 = {
-    name: "Type",
+    name: "Role Names",
     title: "roleNames",
     default: "Choose Value",
     options: [
@@ -96,8 +98,8 @@ const Modal = ({ status, id, setStatus, setMenu}) => {
       ],
     },
     {
-      name: "Level",
-      title: "level",
+      name: "Type",
+      title: "type",
       default: "Choose Value",
       options: [
         {
@@ -120,28 +122,27 @@ const Modal = ({ status, id, setStatus, setMenu}) => {
     },
   ];
 
-  const dispatch = useDispatch();
-  const userEdit = useSelector((state) => state.userEdit);
-  const { loading, error, user } = userEdit;
   
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
-  };
-  const userUpdate = useSelector((state) => state.userUpdate);
-
-  const {
-    loading: loadingUpdate,
-    error: errorUpdate,
-    success: successUpdate,
-  } = userUpdate;
-
-  useEffect(() => {
-    if (successUpdate) {
-      dispatch({ type: USER_UPDATE_RESET });
-    }
     
-    dispatch(editUser(id));
+  };
+  
+// call api get one user
+  const userInfo = localStorage.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : null;
+  const config = {
+    headers: { Authorization: `Bearer ${userInfo.result.accessToken}` },
+  };
 
+  const [results, setResult] = useState("");
+  const getOneUser = async (id) => {
+    const { data } = await axios.get(
+      `https://localhost:44311/api/services/app/User/Get?Id=${id}`,
+      config
+    );
+    const user = data.result;
     setValues({
       userName: user.userName,
       name: user.name,
@@ -151,8 +152,21 @@ const Modal = ({ status, id, setStatus, setMenu}) => {
       level: user.level,
       emailAddress: user.emailAddress,
     });
-  }, [dispatch, id, successUpdate]);
+  };
 
+  useEffect(() => {
+    getOneUser(id);
+  }, [id]);
+  
+
+  const dispatch = useDispatch();
+  const userUpdate = useSelector((state) => state.userUpdate);
+
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = userUpdate;
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
@@ -175,68 +189,71 @@ const Modal = ({ status, id, setStatus, setMenu}) => {
               className="bg-[#FFFFFF] p-8 rounded-lg shadow-lg "
               ref={modalRef}
             >
-              <div className="w-[820px] h-[500px]">
-                <div>
-                  <h2 className="text-[18px] text-black font-bold mb-5 ">
-                    Edit
-                  </h2>
-                  <div className="flex justify-around">
-                    <div className=" w-[320px]">
-                      <FormInput
-                        value={values[inputs[0].name]}
-                        {...inputs[0]}
-                        onChange={handleChange}
-                      />
-                      <FormInput
-                        value={values[inputs[1].name]}
-                        {...inputs[1]}
-                        onChange={handleChange}
-                      />
-                      <SelectMenu
-                        props={SelectInput1}
-                        value={values["roleNames"]}
-                      />
-                      <FormInput
-                        value={values[inputs[2].name]}
-                        {...inputs[2]}
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div className=" w-[320px]">
-                      <FormInput
-                        value={values[inputs[3].name]}
-                        {...inputs[3]}
-                        onChange={handleChange}
-                      />
-                      {SelectInput2.map((item) => (
-                        <SelectMenu 
-                        key={item.id}
-                        props={item} 
-                        value={values[item.title]}  
-                        onChange={handleChange} />
-                      ))}
+              {loadingUpdate ? (
+                <Loading />
+              ) : (
+                <div className="w-[820px] h-[500px]">
+                  <div>
+                    <h2 className="text-[18px] text-black font-bold mb-5 ">
+                      Edit
+                    </h2>
+                    <div className="flex justify-around">
+                      <div className=" w-[320px]">
+                        <FormInput
+                          value={values[inputs[0].name]}
+                          {...inputs[0]}
+                          onChange={handleChange}
+                        />
+                        <FormInput
+                          value={values[inputs[1].name]}
+                          {...inputs[1]}
+                          onChange={handleChange}
+                        />
+                        <SelectMenu
+                          props={SelectInput1}
+                          value={values["roleNames"]}
+                        />
+                        <FormInput
+                          value={values[inputs[2].name]}
+                          {...inputs[2]}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className=" w-[320px]">
+                        <FormInput
+                          value={values[inputs[3].name]}
+                          {...inputs[3]}
+                          onChange={handleChange}
+                        />
+                        {SelectInput2.map((item) => (
+                          <SelectMenu
+                            key={item.id}
+                            props={item}
+                            value={values[item.title]}
+                            onChange={handleChange}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className=" flex justify-end mr-5 mt-20">
-                  <button
-                    className="text-black bg-[#EEEFF3] px-4 py-2 rounded-lg mr-8 text-[15px] hover:opacity-80"
-                    onClick={() => {
-                      setIsOpen(!isOpen);
-                      setStatus(false);
-                      setMenu(false)
-
-                    }
-                    }
-                  >
-                    Cancel
-                  </button>
-                  <button className="text-white bg-main_color px-5 py-2 rounded-lg  text-[15px] hover:opacity-90">
-                    Save
-                  </button>
+                  <div className=" flex justify-end mr-5 mt-20">
+                    <button
+                      className="text-black bg-[#EEEFF3] px-4 py-2 rounded-lg mr-8 text-[15px] hover:opacity-80"
+                      onClick={() => {
+                        setIsOpen(!isOpen);
+                        setStatus(false);
+                        setMenu(false);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button className="text-white bg-main_color px-5 py-2 rounded-lg  text-[15px] hover:opacity-90">
+                      Save
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </form>
         </div>

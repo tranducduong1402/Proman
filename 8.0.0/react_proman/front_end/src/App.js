@@ -93,11 +93,11 @@ function App() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  useEffect(() => {
-    if (userInfo ) {
-      console.log('cos user r')
-    }
-  }, [dispatch, userInfo]);
+  // useEffect(() => {
+  //   if (userInfo ) {
+  //     console.log('cos user r')
+  //   }
+  // }, [dispatch, userInfo]);
 
   return (
     <div className="App">
