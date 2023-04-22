@@ -126,8 +126,8 @@ const Header = ({ name, sendDataToParent }) => {
     },
 
     {
-      name: "Clear Filter",
-      title: "roleNames",
+      name: "Positions",
+      title: "position",
       default: "All",
       options: [
        

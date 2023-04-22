@@ -10,10 +10,11 @@ import avatar from "../../data/image/avatar.jpg";
 import { listUser } from "../../Redux/Actions/UserAction";
 import { useParams } from "react-router-dom";
 import Loading from "../../components/Loading/Loading";
+import SelectFilter from "../../components/SelectedMenu/SelectFilter";
+import DropPagination from "../../components/Dropdown/DropPagiation";
 
 const UserScreen = () => {
   const [dataFilter, setDataFilter] = useState([]);
-  console.log("data cua filter la",dataFilter)
   const listFilter = Object.entries(dataFilter).map((filter) => ({
     propertyName: filter[0],
     value: filter[1],
@@ -40,10 +41,46 @@ const UserScreen = () => {
   const userCreate = useSelector((state) => state.adminCreate);
   const { error: errorCreate, success: successCreate } = userCreate;
 
+  //pagination
+  let [num, setNum] = useState(1);
+  let [cur, setCur] = useState(1);
+  const [maxResultCount, setMaxResultCount] = useState(4);
+  const [skipCount, setSkipCount] = useState(0);
+
+  const maxCount = {
+    name: "pagination",
+    title: "pagination",
+    options: [5, 10, 15],
+  };
+
+  const pages = [{ page: num }, { page: num + 1 }, { page: num + 2 }];
+  function Next() {
+    setNum(++num);
+    const skipUser = (num - 1) * maxResultCount;
+    setSkipCount(skipUser);
+  }
+
+  function back() {
+    if (num > 1) {
+      setNum(--num);
+      const skipUser = (num - 1) * maxResultCount;
+      setSkipCount(skipUser);
+    }
+  }
+
   // call api get all user
   useEffect(() => {
-    dispatch(listUser(keyword, listFilter));
-  }, [dispatch, successDelete, successUpdate, keyword, successCreate, dataFilter]);
+    dispatch(listUser(keyword, listFilter, maxResultCount, skipCount));
+  }, [
+    dispatch,
+    successDelete,
+    successUpdate,
+    keyword,
+    successCreate,
+    dataFilter,
+    num,
+    maxResultCount
+  ]);
 
   const options = ["View", "Edit", "Delete"];
 
@@ -69,7 +106,6 @@ const UserScreen = () => {
       }
     }
   };
-
   const renderSex = (value) => {
     let name = null;
     switch (value) {
@@ -92,7 +128,7 @@ const UserScreen = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="h-screen flex-1 p-7 bg-[#EEEFF3]">
+      <div className="h-[180vh] flex-1 p-7 bg-[#EEEFF3]">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <Header name={"user"} sendDataToParent={handleDataFilter} />
 
@@ -166,7 +202,9 @@ const UserScreen = () => {
                           </label>
                         </div>
                       </td>
-                      <td className="px-6 py-4">{index}</td>
+                      <td className="px-6 py-4">
+                        {(num - 1) * maxResultCount + (index + 1)}
+                      </td>
                       <th
                         scope="row"
                         className="flex items-center  py-4 text-gray-900 whitespace-nowrap dark:text-white"
@@ -214,7 +252,44 @@ const UserScreen = () => {
               )}
             </tbody>
           </table>
-          <Pagination />
+                            
+          <div className="flex bg-white rounded-lg font-[Poppins] py-6 justify-center">
+
+          <DropPagination 
+            props={maxCount}
+            onChange={(e) => setMaxResultCount(e.target.value)}
+            value={maxResultCount}
+            />  
+            <div>
+            <button
+              onClick={back}
+              className="h-[45px] border-2 border-r-0 border-blue-600
+               px-4 rounded-l-lg hover:bg-blue-600 hover:text-white"
+            >
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                <path
+                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  clip-rule="evenodd"
+                  fill-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+            <button
+              onClick={Next}
+              className="h-[45px] border-2  border-blue-600
+               px-4 rounded-r-lg hover:bg-blue-600 hover:text-white"
+            >
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                <path
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                  fill-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
