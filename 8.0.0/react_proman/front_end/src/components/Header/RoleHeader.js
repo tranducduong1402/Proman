@@ -73,7 +73,6 @@ const RoleHeader = () => {
     }, [dispatch]);
     const submitHandler = (e) => {
         e.preventDefault();
-        console.log("AAA")
         dispatch(createRole(values));
     };
 

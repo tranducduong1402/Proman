@@ -18,7 +18,6 @@ const Confirm = ({ confirm, id, name }) => {
   const positionDelete = useSelector((state) => state.positionDelete);
   const { error: errorDelete, success: successDelete } = positionDelete;
   const dispatch = useDispatch();
-  console.log("day la success or fail", successDelete)
   const deleteHandler = (id) => {
     if (name === "user") {
       dispatch(deleteUser(id))
