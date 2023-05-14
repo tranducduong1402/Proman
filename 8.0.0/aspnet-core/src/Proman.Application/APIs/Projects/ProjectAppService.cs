@@ -310,7 +310,7 @@ namespace Proman.APIs.Projects
                 .Where(s => s.Type == UserType.Client)
                 .Select(s => new GetClientDto
                 {
-                    ClientId = s.Id,
+                    Id = s.Id,
                     EmailAddress = s.EmailAddress,
                     FullName = s.FullName,
                     UserName = s.UserName,
@@ -324,7 +324,7 @@ namespace Proman.APIs.Projects
                 .Where(s => s.Type != UserType.Client)
                 .Select(s => new GetClientDto
                 {
-                    ClientId = s.Id,
+                    Id = s.Id,
                     EmailAddress = s.EmailAddress,
                     FullName = s.FullName,
                     UserName = s.UserName,

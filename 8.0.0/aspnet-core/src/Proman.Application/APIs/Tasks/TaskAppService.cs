@@ -175,7 +175,7 @@ namespace Proman.APIs.Tasks
                 .Where(s => s.ProjectId == projectId)
                 .Select(s => new GetClientDto
                 {
-                    ClientId = s.UserId,
+                    Id = s.UserId,
                     EmailAddress = s.User.EmailAddress,
                     FullName = s.User.FullName,
                     UserName = s.User.UserName,
