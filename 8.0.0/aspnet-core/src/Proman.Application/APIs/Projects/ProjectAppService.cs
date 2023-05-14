@@ -275,6 +275,7 @@ namespace Proman.APIs.Projects
         {
             return await WorkLimit.GetAll<ProjectUser>()
                 .Where(s => s.ProjectId == input.Id)
+                .Where(s => s.User.Type != UserType.Client)
                 .Select(s => new GetUserByProjectIdDto
                 {
                     UserId = s.UserId,
@@ -329,6 +330,38 @@ namespace Proman.APIs.Projects
                     FullName = s.FullName,
                     UserName = s.UserName,
                 }).ToListAsync();
+        }
+
+        [HttpPost]
+        public async System.Threading.Tasks.Task AddUserInProject(List<long> userIds, long projectId)
+        {
+            //insert projectUser
+            foreach (var item in userIds)
+            {
+                var projectUser = new ProjectUser
+                {
+                    ProjectId = projectId,
+                    UserId = item,
+                    Type = ProjectUserType.Member,
+                    IsTemp = true
+                };
+                await WorkLimit.GetRepo<ProjectUser, long>().InsertAsync(projectUser);
+            }
+
+        }
+
+        [HttpDelete]
+        public async System.Threading.Tasks.Task DeleteUserInProject(List<long> userIds, long projectId)
+        {
+            var userIdsInProject = WorkLimit.GetAll<ProjectUser>().Where(s => s.ProjectId == projectId).Select(s => s.UserId).ToList();
+            foreach (var item in userIds)
+            {
+                if (userIdsInProject.Contains(item))
+                {
+                    var projectUserId = WorkLimit.GetAll<ProjectUser>().Where(s => s.UserId == item).Select(s => s.Id).FirstOrDefault();
+                    await WorkLimit.GetRepo<ProjectUser>().DeleteAsync(projectUserId);
+                }
+            }
         }
     }
 }
