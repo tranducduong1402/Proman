@@ -50,7 +50,6 @@ export const createRole =
       const {
         userLogin: { userInfo },
       } = getState();
-      console.log(userInfo.result.accessToken);
       const config = {
         headers: { Authorization: `Bearer ${userInfo.result.accessToken}` },
       };
