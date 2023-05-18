@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import Loading from "../../components/Loading/Loading";
 import SelectFilter from "../../components/SelectedMenu/SelectFilter";
 import DropPagination from "../../components/Dropdown/DropPagiation";
+import { Breadcrumb } from "../../components/Breadcrumb/Breadcrumb";
 
 const UserScreen = () => {
   const [dataFilter, setDataFilter] = useState([]);
@@ -44,7 +45,7 @@ const UserScreen = () => {
   //pagination
   let [num, setNum] = useState(1);
   let [cur, setCur] = useState(1);
-  const [maxResultCount, setMaxResultCount] = useState(4);
+  const [maxResultCount, setMaxResultCount] = useState(5);
   const [skipCount, setSkipCount] = useState(0);
 
   const maxCount = {
@@ -130,8 +131,9 @@ const UserScreen = () => {
       <Sidebar />
       <div className="h-[180vh] flex-1 p-7 bg-[#EEEFF3]">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <Header name={"user"} sendDataToParent={handleDataFilter} />
+        <Breadcrumb pagename1="Admin" pagename2="User" />
 
+          <Header name={"user"} sendDataToParent={handleDataFilter} />
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr className=" text-[13px] text-black font-bold">

@@ -7,10 +7,9 @@ import Search from "../../components/Search/Search";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { listRole } from "../../Redux/Actions/RoleAction";
 import RoleHeader from "../../components/Header/RoleHeader";
+import Loading from "../../components/Loading/Loading";
 
 const RoleScreen = () => {
-  const [result, setResult] = useState([]);
-
   const dispatch = useDispatch();
   const roleList = useSelector((state) => state.roleList);
 
@@ -27,11 +26,11 @@ const RoleScreen = () => {
       <Sidebar />
 
       <div className="h-screen flex-1 p-7 bg-[#EEEFF3]">
-        <Breadcrumb pagename1= "Admin" pagename2= "Role"/>
+        <Breadcrumb pagename1="Admin" pagename2="Role" />
 
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <RoleHeader/>
-          {/* <div className="flex justify-between">
+          <RoleHeader />
+           <div className="flex justify-between">
             <div>
               <Search/>
             </div>
@@ -55,7 +54,7 @@ const RoleScreen = () => {
                   Display Name
                 </th>
                 <th scope="col" class="px-6 py-3">
-                description
+                  description
                 </th>
                 <th scope="col" class="px-6 py-3 text-right">
                   Action
@@ -63,30 +62,27 @@ const RoleScreen = () => {
               </tr>
             </thead>
             <tbody>
-              { loading ? (
-                <div> loading ...</div>
+              {loading ? (
+               <Loading/>
               ) : (
                 <React.Fragment>
                   {roles.map((item, index) => (
-                    <tr 
-                    key = {item.id} 
-                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th
-                      scope="row"
-                      class="px-6 py-4 font-medium whitespace-nowrap dark:text-white"
+                    <tr
+                      key={item.id}
+                      class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                     >
-                      {item.name}
-                    </th>
-                    <td class="pl-12 py-4 ">
-                      {item.displayName}
-                    </td>
-                    <td class="pl-12 py-4 ">
-                      {item.description}
-                    </td>
-                    <td className="px-10 py-4 text-right">
-                      <DropMenu options={options} />
-                    </td>
-                  </tr>
+                      <th
+                        scope="row"
+                        class="px-6 py-4 font-medium whitespace-nowrap dark:text-white"
+                      >
+                        {item.name}
+                      </th>
+                      <td class="pl-12 py-4 ">{item.displayName}</td>
+                      <td class="pl-12 py-4 ">{item.description}</td>
+                      <td className="px-10 py-4 text-right">
+                        <DropMenu options={options} />
+                      </td>
+                    </tr>
                   ))}
                 </React.Fragment>
               )}

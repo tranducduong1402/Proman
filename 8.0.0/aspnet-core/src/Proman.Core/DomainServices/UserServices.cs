@@ -98,6 +98,7 @@ namespace Proman.DomainServices
             ObjectMapper.Map(input, user);
 
             user.UserName = input.UserName?.Replace("@gmail.com", "");
+            user.IsActive = true;
 
             await _userManager.UpdateAsync(user);
 

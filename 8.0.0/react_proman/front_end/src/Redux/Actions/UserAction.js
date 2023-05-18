@@ -232,7 +232,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
 };
 
 
-// DELETE PRODUCT
+// DELETE User
 export const deleteUser = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_DELETE_REQUEST });
