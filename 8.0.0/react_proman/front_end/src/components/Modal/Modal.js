@@ -149,7 +149,7 @@ const Modal = ({ status, id, setStatus, setMenu }) => {
       surname: user.surname,
       roleNames: user.roleNames,
       sex: user.sex,
-      level: user.level,
+      type: user.type,
       emailAddress: user.emailAddress,
     });
   };
@@ -176,7 +176,7 @@ const Modal = ({ status, id, setStatus, setMenu }) => {
       })
     );
   };
-
+  
   return (
     <div>
       {isOpen && (
@@ -212,6 +212,7 @@ const Modal = ({ status, id, setStatus, setMenu }) => {
                         <SelectMenu
                           props={SelectInput1}
                           value={values["roleNames"]}
+                          onChange={handleChange}
                         />
                         <FormInput
                           value={values[inputs[2].name]}

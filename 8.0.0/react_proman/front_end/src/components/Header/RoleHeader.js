@@ -105,7 +105,7 @@ const RoleHeader = () => {
                         ref={modalRef}
                     >
                         <div className="w-[820px] h-[500px]">
-                            <h2 className="text-[18px] text-black font-bold mb-5 ">
+                            <h2 className="text-[14px] text-black font-bold mb-5 ">
                                 {" "}
                                 Create new role{" "}
                             </h2>

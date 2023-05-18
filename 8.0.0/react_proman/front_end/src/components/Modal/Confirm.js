@@ -18,14 +18,14 @@ const Confirm = ({ confirm, id, name }) => {
   const positionDelete = useSelector((state) => state.positionDelete);
   const { error: errorDelete, success: successDelete } = positionDelete;
   const dispatch = useDispatch();
+  
   const deleteHandler = (id) => {
     if (name === "user") {
       dispatch(deleteUser(id))
     }
 
     if (name === "position") {
-      dispatch(deletePosition(id))
-      
+      dispatch(deletePosition(id))   
     }
   };
 
@@ -57,8 +57,8 @@ const Confirm = ({ confirm, id, name }) => {
           </div>
         </div>
       )}
-    </div>
-  )
-}
+      </div>
+    )
+      }
 
 export default Confirm

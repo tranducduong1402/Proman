@@ -126,8 +126,8 @@ const Header = ({ name, sendDataToParent }) => {
     },
 
     {
-      name: "Clear Filter",
-      title: "roleNames",
+      name: "Positions",
+      title: "position",
       default: "All",
       options: [
        
@@ -301,7 +301,7 @@ const Header = ({ name, sendDataToParent }) => {
               </h2>
               <form onSubmit={submitHandler}>
                 <div className="flex justify-around">
-                  <div className=" w-[320px]">
+                  <div className="w-[320px]">
                     <FormInput
                       key={inputs[0].id}
                       {...inputs[0]}

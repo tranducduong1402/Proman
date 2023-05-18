@@ -55,7 +55,7 @@ export const login = (userNameOrEmailAddress, password) => async (dispatch) => {
 };
 
 // ALL USER
-export const listUser = (keyword = "", listFilter ) => async (dispatch, getState) => {
+export const listUser = (keyword = "", listFilter, maxResultCount, skipCount ) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_LIST_REQUEST });
     
@@ -70,7 +70,7 @@ export const listUser = (keyword = "", listFilter ) => async (dispatch, getState
     };
 
     const { data } = await axios.post(
-      `https://localhost:44311/api/services/app/User/GetAllPaging`,{ searchText: keyword, filterItems: listFilter },
+      `https://localhost:44311/api/services/app/User/GetAllPaging`,{ searchText: keyword, filterItems: listFilter, maxResultCount, skipCount },
       config,
     );
 
@@ -232,7 +232,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
 };
 
 
-// DELETE PRODUCT
+// DELETE User
 export const deleteUser = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_DELETE_REQUEST });

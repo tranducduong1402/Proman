@@ -14,11 +14,17 @@ const Pagination = () =>
    function Next ()
    {
       setNum(++num)
+      const maxResultCount = 3;
+      const skipCount = (num - 1) * maxResultCount;
+
    }
    function back ()
    {
       num > 1 && setNum(--num)
+      const maxResultCount = 3;
+      const skipCount = (num - 1) * maxResultCount;
    }
+   
    return (
       <div className="flex bg-white rounded-lg font-[Poppins] py-6 justify-center">
          <button onClick={back} className="h-[45px] border-2 border-r-0 border-blue-600

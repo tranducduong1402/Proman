@@ -76,7 +76,13 @@ const Position = () => {
                       <td className="px-6 py-4">{item.name}</td>
                       <td className="px-6 py-4">{item.shortName}</td>
                       <td className="px-6 py-4">{item.code}</td>
-                      <td className="px-6 py-4">{item.color}</td>
+                      <td className="px-6 py-4">
+                      <div className="rounded-lg">
+                      <span className={`bg-[${item.color}] rounded-lg px-3 text-white` }>
+                      {item.color}
+                      </span>
+                      </div>
+                      </td>
                       <td className="px-10 py-8 text-center">
                         <DropMenuPosition
                          options={options} id ={item.id} name = {"position"}/>

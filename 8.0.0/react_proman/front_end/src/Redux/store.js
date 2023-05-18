@@ -10,6 +10,8 @@ import {
     userRegisterReducer, 
     userUpdateReducer } from "./Reducers/UserReducer";
 import { positionCreateReducer, positionDeleteReducer, positionListReducer, positionUpdateReducer, postionDetailReducer, postionEditReducer } from "./Reducers/PositionReducer";
+import { roleListReducer } from "./Reducers/RoleReducer";
+import { projectCreateReducer, projectDeleteReducer, projectListReducer } from "./Reducers/ProjectReducer";
 
 const reducer = combineReducers({
     userLogin: userLoginReducer,
@@ -23,7 +25,11 @@ const reducer = combineReducers({
     positionCreate: positionCreateReducer,
     positionDelete: positionDeleteReducer,
     positionDetail: postionDetailReducer,
-    positionUpdate: positionUpdateReducer
+    positionUpdate: positionUpdateReducer,
+    roleList: roleListReducer,
+    projectList: projectListReducer,
+    projectDelete: projectDeleteReducer,
+    projectCreate: projectCreateReducer
   });
 
 // login
