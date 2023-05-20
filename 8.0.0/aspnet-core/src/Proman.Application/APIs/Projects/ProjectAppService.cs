@@ -363,5 +363,11 @@ namespace Proman.APIs.Projects
                 }
             }
         }
+
+        [HttpDelete]
+        public async System.Threading.Tasks.Task Delete(EntityDto<long> input)
+        {
+            await WorkLimit.GetRepo<Project>().DeleteAsync(input.Id);
+        }
     }
 }
