@@ -14,10 +14,12 @@ namespace Proman.APIs.Projects.Dto
 {
     public class GetProjectDto : Entity<long>
     {
+        [ApplySearch]
         public string Name { get; set; }
         public DateTime TimeStart { get; set; }
         public DateTime? TimeEnd { get; set; }
         public ProjectStatus Status { get; set; }
+        [ApplySearch]
         public string Code { get; set; }
         public ProjectType ProjectType { get; set; }
         public DateTime UpdatedAt => LastModifierTime.HasValue ? LastModifierTime.Value : CreationTime;
