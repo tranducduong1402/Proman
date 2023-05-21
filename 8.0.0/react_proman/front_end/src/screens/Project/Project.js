@@ -12,6 +12,9 @@ import Loading from "../../components/Loading/Loading";
 import moment from "moment/moment";
 import ProjectHeader from "../../components/Header/HeaderProject";
 import { useParams } from "react-router-dom";
+import avatar from "../../data/image/avatar.jpg";
+import DropDownAddNewMember from "../../components/Dropdown/DropDownAddNewMember";
+
 const Project = () => {
   const data = [
     {
@@ -42,7 +45,7 @@ const Project = () => {
       isActive: false,
     },
   ];
-
+  const [isOpenAddMember, setOpenAddMember] = useState(false);
   const dispatch = useDispatch();
   const projectList = useSelector((state) => state.projectList);
   const { error, loading, projects } = projectList;
@@ -52,9 +55,6 @@ const Project = () => {
     dispatch(listProject(keyword));
   }, [dispatch, keyword]);
 
-  // const renderProjectType = (type) => {
-
-  // }
   const options = ["View", "Edit", "Delete"];
   return (
     <div className="flex">
@@ -83,13 +83,13 @@ const Project = () => {
                   Project Name
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Code
-                </th>
-                <th scope="col" className="px-6 py-3">
                   Project Type
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Create By
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Member
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Start
@@ -133,12 +133,28 @@ const Project = () => {
                       </td>
                       <td className="px-6 py-4">{item.name}</td>
 
-                      <td className="px-6 py-4">{item.code}</td>
                       <td className="px-6 py-4">
                         {item.projectType === 1 ? "Product" : "OutSource"}
                       </td>
-
                       <td className="px-6 py-4">{item.createdUserName}</td>
+                      <td className="px-6 py-18">
+                        <div className="flex align-middle justify-between">
+                          <img
+                            class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                            src={avatar}
+                            alt="Bordered avatar"
+                          />
+                          <div
+                            className="bg-main_color text-white ml-3 w-5 text-center h-5 mt-3 cursor-pointer"
+                            onClick={() => setOpenAddMember(!isOpenAddMember)}
+                          >
+                            <DropDownAddNewMember/>
+                          </div>
+                          <div className="bg-red-500 text-white w-5 text-center h-5 mt-3 cursor-pointer">
+                            <i class="fa-sharp fa-solid fa-xmark"></i>
+                          </div>
+                        </div>
+                      </td>
                       <td className="px-6 py-4">
                         {moment(item.timeStart).format("DD/MM/YYYY")}
                       </td>
