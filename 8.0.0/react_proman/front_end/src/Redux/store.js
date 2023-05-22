@@ -12,6 +12,7 @@ import {
 import { positionCreateReducer, positionDeleteReducer, positionListReducer, positionUpdateReducer, postionDetailReducer, postionEditReducer } from "./Reducers/PositionReducer";
 import { roleListReducer } from "./Reducers/RoleReducer";
 import { projectCreateReducer, projectDeleteReducer, projectListReducer } from "./Reducers/ProjectReducer";
+import { clientCreateReducer, clientDeleteReducer, clientEditReducer, clientListReducer, clientUpdateReducer } from "./Reducers/ClientReducer";
 
 const reducer = combineReducers({
     userLogin: userLoginReducer,
@@ -29,7 +30,12 @@ const reducer = combineReducers({
     roleList: roleListReducer,
     projectList: projectListReducer,
     projectDelete: projectDeleteReducer,
-    projectCreate: projectCreateReducer
+    projectCreate: projectCreateReducer,
+    clientList: clientListReducer,
+    clientCreate: clientCreateReducer,
+    clientEdit: clientEditReducer,
+    clientUpdate: clientUpdateReducer,
+    clientDelete: clientDeleteReducer,
   });
 
 // login

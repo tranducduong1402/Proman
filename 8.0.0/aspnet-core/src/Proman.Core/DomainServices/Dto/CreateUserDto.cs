@@ -66,4 +66,32 @@ namespace Proman.DomainServices.Dto
         public DateTime? EndDateAt { get; set; }
         public long? PositionId { get; set; }
     }
+
+    [AutoMapTo(typeof(User))]
+    public class CreateClientDto : IShouldNormalize
+    {
+        public long Id { get; set; }
+        public string UserName { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string EmailAddress { get; set; }
+
+        public bool IsActive { get; set; }
+        public string Address { get; set; }
+
+        public string[] RoleNames { get; set; }
+        public string Password { get; set; }
+        public UserType? Type { get; set; }
+        [ApplySearch]
+        public string UserCode { get; set; }
+        public void Normalize()
+        {
+            if (RoleNames == null)
+            {
+                RoleNames = new string[0];
+            }
+        }
+        public Sex? Sex { get; set; }
+        public string AvatarPath { get; set; }
+    }
 }
