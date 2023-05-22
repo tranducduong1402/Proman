@@ -17,14 +17,11 @@ namespace Proman.Users.Dto
         public string EmailAddress { get; set; }
         public bool IsActive { get; set; }
         public string FullName { get; set; }
-        public List<int> RoleId { get; set; }
-        public List<string> RoleNames { get; set; }
-        public UserType? Type { get; set; }
         public string UserCode { get; set; }
-        public UserLevel? Level { get; set; }
         //public string AvatarPath { get; set; }
         //public string AvatarFullPath => FileUtils.FullFilePath(AvatarPath);
         public Sex? Sex { get; set; }
         public DateTime CreationTime { get; set; }
+        public int? ProjectCount { get; set; }
     }
 }
