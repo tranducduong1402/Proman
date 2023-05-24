@@ -9,7 +9,7 @@ const DropMenu = ({ options, id, name }) => {
 
   return (
     <div>
-      <div class="relative inline-block text-left">
+      <div class="relative inline-block text-left ">
         <div>
           <button type="button" onClick={() => setOpen(!open)}>
             <i class="fa-solid fa-bars"></i>
@@ -17,7 +17,7 @@ const DropMenu = ({ options, id, name }) => {
         </div>
 
         {open ? (
-          <div class="absolute right-0  h-[139px] mt-2 w-[169px] origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div class="absolute right-0 z-[120] h-[139px] mt-2 w-[169px] origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div class=" ">
               {options && (
                 <div className="text-[#334155] cursor-pointer mt-2">

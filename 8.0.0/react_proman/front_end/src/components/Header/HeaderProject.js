@@ -141,7 +141,7 @@ const ProjectHeader = ({ name }) => {
       </div>
 
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81]">
+        <div className="fixed inset-0 z-[300] flex items-center justify-center bg-gray-700 bg-opacity-[0.81]">
           <div className="bg-white rounded-md shadow-md p-4">
             <h2 className="text-[14px] text-black font-bold mb-5 ">
               Create New Project

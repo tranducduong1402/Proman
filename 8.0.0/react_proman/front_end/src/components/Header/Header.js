@@ -288,7 +288,7 @@ const Header = ({ name, sendDataToParent }) => {
 
       {isOpen && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81]"
+          className="fixed z-[999] inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81]"
           onClick={handleClose}
         >
           <div

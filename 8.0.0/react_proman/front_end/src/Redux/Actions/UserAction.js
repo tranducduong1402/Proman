@@ -23,6 +23,7 @@ import {
   USER_DELETE_SUCCESS,
   USER_DELETE_FAIL
 } from "../Constants/UserContants";
+import { toast } from "react-toastify";
 
 // LOGIN
 export const login = (userNameOrEmailAddress, password) => async (dispatch) => {
@@ -151,8 +152,13 @@ export const createUser =
         },
         config
       );
-      dispatch({ type: ADMIN_CREATE_USER_SUCCESS, payload: data });
+      if(data.success){
+        toast.success("Create user success")
+        dispatch({ type: ADMIN_CREATE_USER_SUCCESS, payload: data });
+      }
+      else toast.error("Create user fail")
     } catch (error) {
+      console.log(error)
       const message =
         error.response && error.response.data.message
           ? error.response.data.message
@@ -161,6 +167,7 @@ export const createUser =
         type: ADMIN_CREATE_USER_FAIL,
         payload: message,
       });
+      toast.error(`Create Fail ${error.response.data.error.message}`)
     }
   };
 
