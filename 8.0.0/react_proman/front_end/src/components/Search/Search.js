@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const Search = ({namesearch}) => {
   const [keyword, setKeyword] = useState();
   const navigate = useNavigate();
-  
+  console.log("day la key word",keyword)
   const submitHandler = (e) => {
     e.preventDefault();
     if (keyword.trim()) {

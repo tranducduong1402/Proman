@@ -4,24 +4,32 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../Redux/Actions/UserAction";
+import { toast } from "react-toastify";
 
 function LoginScreen() {
   const [userNameOrEmailAddress, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
-  const { error, loading, userInfo } = userLogin;
+  const { error, loading, userInfo, status } = userLogin;
+  console.log(userLogin)
   let navigate = useNavigate();
   useEffect(() => {
-    if (userInfo) {
+    if (status) {
       navigate("/home");
     }
-  }, [userInfo]);
-
+  }, [status]);
+ 
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(login(userNameOrEmailAddress, password));
+    // if (status) {
+    //   toast.success("Login success");
+    //   navigate("/home");
+    // }
+    // else toast.error("Login fail")
   };
+
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-tr from-blue-100 to-blue-400">
       <div className="w-[380px] h-[28rem] p-10 shadow-lg bg-white rounded-lg">
