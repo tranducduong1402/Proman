@@ -12,6 +12,10 @@ import {
 import { positionCreateReducer, positionDeleteReducer, positionListReducer, positionUpdateReducer, postionDetailReducer, postionEditReducer } from "./Reducers/PositionReducer";
 import { roleListReducer } from "./Reducers/RoleReducer";
 import { projectCreateReducer, projectDeleteReducer, projectListReducer } from "./Reducers/ProjectReducer";
+import { loadState, saveState } from '../helpers/localStorage';
+import stateHistoryEnhancer from "./Reducers/stateHistoryEnhancer";
+import board from "./Reducers/boardReducer";
+import search from './Reducers/searchReducer';
 import { clientCreateReducer, clientDeleteReducer, clientEditReducer, clientListReducer, clientUpdateReducer } from "./Reducers/ClientReducer";
 
 const reducer = combineReducers({
@@ -31,6 +35,8 @@ const reducer = combineReducers({
     projectList: projectListReducer,
     projectDelete: projectDeleteReducer,
     projectCreate: projectCreateReducer,
+    board: stateHistoryEnhancer(board),
+    search
     clientList: clientListReducer,
     clientCreate: clientCreateReducer,
     clientEdit: clientEditReducer,
@@ -46,6 +52,8 @@ const userInfoFromLocalStorage = localStorage.getItem("userInfo")
 const initialState = {
   userLogin: { userInfo: userInfoFromLocalStorage },
 };
+// const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const persistedState = loadState();
 
   const middleware = [thunk]
   const store = createStore(
@@ -53,4 +61,10 @@ const initialState = {
     initialState,
     composeWithDevTools(applyMiddleware(...middleware))
   );
+  
+store.subscribe(() => {
+  const state = { ...store.getState() };
+  saveState(state);
+});
+
   export default store;
