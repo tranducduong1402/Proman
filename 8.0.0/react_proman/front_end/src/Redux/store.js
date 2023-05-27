@@ -16,7 +16,7 @@ import { loadState, saveState } from '../helpers/localStorage';
 import stateHistoryEnhancer from "./Reducers/stateHistoryEnhancer";
 import board from "./Reducers/boardReducer";
 import search from './Reducers/searchReducer';
-
+import { clientCreateReducer, clientDeleteReducer, clientEditReducer, clientListReducer, clientUpdateReducer } from "./Reducers/ClientReducer";
 
 const reducer = combineReducers({
     userLogin: userLoginReducer,
@@ -37,6 +37,11 @@ const reducer = combineReducers({
     projectCreate: projectCreateReducer,
     board: stateHistoryEnhancer(board),
     search
+    clientList: clientListReducer,
+    clientCreate: clientCreateReducer,
+    clientEdit: clientEditReducer,
+    clientUpdate: clientUpdateReducer,
+    clientDelete: clientDeleteReducer,
   });
 
 // login

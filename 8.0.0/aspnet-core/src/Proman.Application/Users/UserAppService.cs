@@ -16,11 +16,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Proman.APIs.Positions.Dto;
 using Proman.Authorization;
 using Proman.Authorization.Roles;
 using Proman.Authorization.Users;
 using Proman.DomainServices;
 using Proman.DomainServices.Dto;
+using Proman.Entities;
 using Proman.Extension;
 using Proman.IIoc;
 using Proman.Paging;
@@ -97,7 +99,7 @@ namespace Proman.Users
             return MapToEntityDto(user);
         }
 
-        public async Task<UserDto> CreateClient(CreateUserDto input)
+        public async Task<UserDto> CreateClient(CreateClientDto input)
         {
             CheckCreatePermission();
 
@@ -124,6 +126,14 @@ namespace Proman.Users
 
         public override async Task<UserDto> UpdateAsync(UserDto input)
         {
+            await _userServices.UpdateUserAsync(input);
+            return input;
+        }
+
+        public async Task<UserDto> UpdateClient(UserDto input)
+        {
+            input.IsActive = true;
+            input.Type = Constants.Enum.StatusEnum.UserType.Client;
             await _userServices.UpdateUserAsync(input);
             return input;
         }
@@ -378,35 +388,20 @@ namespace Proman.Users
         [HttpPost]
         public async Task<GridResult<GetAllClientDto>> GetAllClientPaging(GridParam input)
         {
-            var qUserRoles = from ur in _workLimit.GetAll<UserRole>()
-                             join r in _workLimit.GetAll<Role, int>() on ur.RoleId equals r.Id
-                             select new
-                             {
-                                 ur.UserId,
-                                 RoleName = r.Name
-                             };
-
-
-            var query = from u in _workLimit.GetAll<User>()
-                        join ur in qUserRoles on u.Id equals ur.UserId into roles
-                        where u.Type == Constants.Enum.StatusEnum.UserType.Client
-                        select new GetAllClientDto
+            var query = _workLimit.GetAll<User>()
+                        .Where(s => s.Type == Constants.Enum.StatusEnum.UserType.Client)
+                        .Select(u =>  new GetAllClientDto
                         {
                             Id = u.Id,
                             UserName = u.UserName,
                             FullName = u.FullName,
                             IsActive = u.IsActive,
                             EmailAddress = u.EmailAddress,
-                            RoleId = _workLimit.GetAll<UserRole>().Where(s => s.UserId == u.Id).Select(s => s.RoleId).ToList(),
-                            RoleNames = _workLimit.GetAll<Role, int>()
-                            .Where(s => _workLimit.GetAll<UserRole>().Where(s => s.UserId == u.Id).Select(s => s.RoleId).ToList()
-                            .Contains(s.Id)).Select(s => s.Name).ToList(),
-                            Type = u.Type,
-                            Level = u.Level,
                             UserCode = u.UserCode,
                             Sex = u.Sex,
                             CreationTime = u.CreationTime,
-                        };
+                            ProjectCount = _workLimit.GetAll<Project>().Where(x => x.CustomerId == u.Id).Count(),
+                        });
 
             return await query.GetGridResult(query, input);
         }
