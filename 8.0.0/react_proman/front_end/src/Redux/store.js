@@ -36,12 +36,14 @@ const reducer = combineReducers({
     projectDelete: projectDeleteReducer,
     projectCreate: projectCreateReducer,
     board: stateHistoryEnhancer(board),
-    search
+    search,
     clientList: clientListReducer,
     clientCreate: clientCreateReducer,
     clientEdit: clientEditReducer,
     clientUpdate: clientUpdateReducer,
     clientDelete: clientDeleteReducer,
+
+    
   });
 
 // login
