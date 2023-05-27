@@ -1,12 +1,13 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../data/image/logo_proman.png";
 import rollback from "../../data/image/roll_back.png";
 import RoleScreen from "../../screens/Role/RoleScreen";
 import UserScreen from "../../screens/User/UserScreen";
 import Dropdown from "../Dropdown/Dropdown";
 import Header from "../Header/Header";
+import { toast } from "react-toastify";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
@@ -31,7 +32,12 @@ const Sidebar = () => {
   };
 
   const Menus = [{ title: "Dashboard", src: "fa-sharp fa-solid fa-bolt" }];
-
+  const navigate = useNavigate();
+  const handleLogOut = () => {
+      localStorage.removeItem('userInfo');
+      navigate('/')
+      toast.success("LogOut Success");
+  }
   return (
     <div className="flex">
       <div
@@ -61,7 +67,7 @@ const Sidebar = () => {
           </h1>
         </div>
 
-        <div className={`${!open && "hidden"} origin-left duration-200 mt-9 `}>
+        <div className={`${!open && "hidden"} origin-left duration-200 mt-9 font-semibold `}>
           Main Menu
         </div>
         <ul className="pt-4">
@@ -164,7 +170,12 @@ const Sidebar = () => {
             </span>
           </li>
 
-          <li className={`${!open && "hidden"} origin-left duration-200 mt-9 `}>
+          <li className="mt-10 cursor-pointer"  onClick={() => handleLogOut()}>
+            <i class="fa-solid fa-right-from-bracket text-main_color text-lg"></i>
+            <span className="ml-2 font-semibold mb-2"> Log Out</span>
+          </li>
+
+          <li className={`${!open && "hidden"} origin-left duration-200 mt-56 `}>
             <h2 className="text-[16px] mb-2"> Project Management </h2>
             <h3 className=" text-[#828282] text-xs mb-2">
               {" "}
