@@ -25,9 +25,9 @@ const DropDownAddNewMember = () => {
         </div>
 
         {open ? (
-          <div class="absolute right-0  h-[139px] mt-2 w-[169px] origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div class=" ">
-              <div className="text-[#334155] cursor-pointer mt-2">
+          <div class="absolute right-0 mt-2 w-[169px] origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <div className="" >
+              <div className="text-[#334155] cursor-pointer mt-2 h-full ">
                 <div className="rounded-sm flex  hover:bg-main_color h-[38px] hover:text-white w-full">
                   <input
                     type="text"
@@ -38,7 +38,7 @@ const DropDownAddNewMember = () => {
                     onChange={(e) => handleChange(e.target.value)}
                   />
                 </div>
-                {users ? users.map(item => (<div className="ml-2"> {item.userName}</div>)): null}
+                {users ? users.map(item => (<div className="ml-2 mb-[3px]"> {item.userName}</div>)): null}
               </div>
             </div>
           </div>
