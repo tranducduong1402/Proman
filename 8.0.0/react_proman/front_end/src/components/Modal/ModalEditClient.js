@@ -6,7 +6,7 @@ import { updateClient } from "../../Redux/Actions/ClientAction";
 import Loading from "../Loading/Loading";
 import FormInput from "../FormInput/FormInput";
 
-const ModalEditClient = ({ status, id, setStatus, setMenu }) => {
+const ModalEditClient = ({ status, id, setStatus, setMenu, disable, nameView }) => {
   const [isOpen, setIsOpen] = useState(status);
   const modalRef = useRef(null);
   const handleClose = (event) => {
@@ -152,7 +152,7 @@ const ModalEditClient = ({ status, id, setStatus, setMenu }) => {
     <div>
       {isOpen && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81]"
+          className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81] z-[999]"
           onClick={handleClose}
         >
           <form onSubmit={submitHandler}>
@@ -174,16 +174,19 @@ const ModalEditClient = ({ status, id, setStatus, setMenu }) => {
                           value={values[inputs[0].name]}
                           {...inputs[0]}
                           onChange={handleChange}
+                          status ={disable}
                         />
                         <FormInput
                           value={values[inputs[1].name]}
                           {...inputs[1]}
                           onChange={handleChange}
+                          status ={disable}
                         />
                         <FormInput
                           value={values[inputs[2].name]}
                           {...inputs[2]}
                           onChange={handleChange}
+                          status ={disable}
                         />
                       </div>
                     </div>

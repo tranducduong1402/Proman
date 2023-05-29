@@ -255,7 +255,7 @@ const UserScreen = () => {
             </tbody>
           </table>
                             
-          <div className="flex bg-white rounded-lg font-[Poppins] py-6 justify-center">
+          <div className="flex bg-white rounded-lg font-[Poppins] py-6 justify-center z-20 ">
 
           <DropPagination 
             props={maxCount}
