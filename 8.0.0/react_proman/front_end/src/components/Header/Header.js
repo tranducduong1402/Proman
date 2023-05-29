@@ -126,11 +126,11 @@ const Header = ({ name, sendDataToParent }) => {
     },
 
     {
-      name: "Positions",
-      title: "position",
+      name: "Clear",
+      title: "Clear All",
       default: "All",
       options: [
-       
+        
       ],
     },
   ];

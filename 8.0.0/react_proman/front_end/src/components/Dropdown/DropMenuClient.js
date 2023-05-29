@@ -5,8 +5,10 @@ import Confirm from "../Modal/Confirm";
 const DropMenuClient = ({ options, id, name }) => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(false);
+  const [viewDeatil, setViewDeatil] = useState(false);
   const [isConfirm, setIsConfirm] = useState(false);
-    console.log(id, "ClientIdV1: ");
+  const [nameView, setNameView] = useState(false)
+
   return (
     <div>
       <div class="relative inline-block text-left">
@@ -25,6 +27,9 @@ const DropMenuClient = ({ options, id, name }) => {
                     className="rounded-sm flex  hover:bg-main_color h-[38px] hover:text-white w-full"
                     onClick={() => {
                       setStatus(!status);
+                      setViewDeatil(true);
+                      setNameView(true);
+                      setOpen(!open)
                     }}
                   >
                     <i class="fa-solid fa-eye mt-3 mx-3"></i>
@@ -35,6 +40,9 @@ const DropMenuClient = ({ options, id, name }) => {
                     onClick={() => {
                       setStatus(!status);
                       setOpen(!open);
+                      setViewDeatil(false);
+                      setNameView(false);
+
                     }}
                   >
                     <i class="fa-solid fa-pen-to-square mt-3 mx-3"></i>
@@ -62,6 +70,8 @@ const DropMenuClient = ({ options, id, name }) => {
           id={id}
           setStatus={setStatus}
           setMenu={setOpen}
+          disable = {viewDeatil}
+          nameView 
         />
       )}
       {isConfirm && <Confirm confirm={isConfirm} id={id} name={name} />}

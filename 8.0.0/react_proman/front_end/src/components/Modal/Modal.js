@@ -7,7 +7,7 @@ import { editUser, updateUser } from "../../Redux/Actions/UserAction";
 import Loading from "../Loading/Loading";
 import axios from "axios";
 
-const Modal = ({ status, id, setStatus, setMenu }) => {
+const Modal = ({ status, id, setStatus, setMenu,disable }) => {
   const [isOpen, setIsOpen] = useState(status);
   const modalRef = useRef(null);
   const handleClose = (event) => {
@@ -181,7 +181,7 @@ const Modal = ({ status, id, setStatus, setMenu }) => {
     <div>
       {isOpen && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81]"
+          className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81] z-[999]" 
           onClick={handleClose}
         >
           <form onSubmit={submitHandler}>
@@ -203,21 +203,28 @@ const Modal = ({ status, id, setStatus, setMenu }) => {
                           value={values[inputs[0].name]}
                           {...inputs[0]}
                           onChange={handleChange}
+                          status ={disable}
                         />
                         <FormInput
                           value={values[inputs[1].name]}
                           {...inputs[1]}
                           onChange={handleChange}
+                          status ={disable}
+
                         />
                         <SelectMenu
                           props={SelectInput1}
                           value={values["roleNames"]}
                           onChange={handleChange}
+                          status ={disable}
+
                         />
                         <FormInput
                           value={values[inputs[2].name]}
                           {...inputs[2]}
                           onChange={handleChange}
+                          status ={disable}
+
                         />
                       </div>
                       <div className=" w-[320px]">
@@ -225,6 +232,7 @@ const Modal = ({ status, id, setStatus, setMenu }) => {
                           value={values[inputs[3].name]}
                           {...inputs[3]}
                           onChange={handleChange}
+                          status ={disable}
                         />
                         {SelectInput2.map((item) => (
                           <SelectMenu

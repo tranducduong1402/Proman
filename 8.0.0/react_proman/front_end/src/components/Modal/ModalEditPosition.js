@@ -103,7 +103,7 @@ const ModalEditPosition = ({ status, id }) => {
         <div>
             {isOpen && (
                 <div
-                    className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81]"
+                    className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81] z-[999]"
                     onClick={handleClose}
                 >
                     <form onSubmit={submitHandler}>

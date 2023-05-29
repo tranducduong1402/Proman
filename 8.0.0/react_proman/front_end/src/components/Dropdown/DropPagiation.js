@@ -3,7 +3,7 @@ import React from "react";
 const DropPagination = ({ props, onChange, value }) => {  
 
   return (
-    <div className="relative right-[470px]">
+    <div className="relative right-[470px] z-50">
       <select
         id="countries"
         class="

@@ -30,20 +30,7 @@ const RoleScreen = () => {
 
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <RoleHeader />
-           <div className="flex justify-between">
-            <div>
-              <Search/>
-            </div>
-            <div className="">
-              <button
-                className="bg-main_color text-white hover:opacity-80 w-[148px] h-[50px] rounded-lg text-sm"
-                // onClick={() => setIsOpen(!isOpen)}
-              >
-                <i class="fa-solid fa-plus mr-2"></i>
-                Create new role
-              </button>
-            </div>
-          </div> */}
+          
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 mt-4">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>

@@ -97,7 +97,7 @@ function LoginScreen() {
           </Link>
         </div>
       </div>
-    </div>
+   </div>
   );
 }
 

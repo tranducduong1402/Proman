@@ -36,7 +36,7 @@ const Sidebar = () => {
   const handleLogOut = () => {
       localStorage.removeItem('userInfo');
       navigate('/')
-      toast.success("LogOut Success");
+      toast.success("Logout Success");
   }
   return (
     <div className="flex">

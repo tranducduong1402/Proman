@@ -6,7 +6,7 @@ const DropMenu = ({ options, id, name }) => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(false);
   const [isConfirm, setIsConfirm] = useState(false);
-
+  const [viewDeatil, setViewDeatil] = useState(false);
   return (
     <div>
       <div class="relative inline-block text-left ">
@@ -25,6 +25,8 @@ const DropMenu = ({ options, id, name }) => {
                     className="rounded-sm flex  hover:bg-main_color h-[38px] hover:text-white w-full"
                     onClick={() => {
                       setStatus(!status);
+                      setViewDeatil(true);
+                      setOpen(!open)
                     }}
                   >
                     <i class="fa-solid fa-eye mt-3 mx-3"></i>
@@ -35,6 +37,7 @@ const DropMenu = ({ options, id, name }) => {
                     onClick={() => {
                       setStatus(!status);
                       setOpen(!open);
+                      setViewDeatil(false);
                     }}
                   >
                     <i class="fa-solid fa-pen-to-square mt-3 mx-3"></i>

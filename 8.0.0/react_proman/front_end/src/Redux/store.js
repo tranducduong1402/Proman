@@ -42,8 +42,6 @@ const reducer = combineReducers({
     clientEdit: clientEditReducer,
     clientUpdate: clientUpdateReducer,
     clientDelete: clientDeleteReducer,
-
-    
   });
 
 // login
