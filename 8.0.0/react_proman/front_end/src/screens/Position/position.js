@@ -29,7 +29,6 @@ const Position = () => {
   useEffect(() => {
     dispatch(listPosition(keyword));
   }, [dispatch, successCreate, successDelete, successUpdate, keyword]);
-
   const options = ["View", "Edit", "Delete"];
   return (
     <div className="flex">
@@ -78,7 +77,7 @@ const Position = () => {
                       <td className="px-6 py-4">{item.code}</td>
                       <td className="px-6 py-4">
                       <div className="rounded-lg">
-                      <span className={`bg-[${item.color}] rounded-lg px-3 text-white` }>
+                      <span className="rounded-lg px-3 text-white" style={{backgroundColor: `${item.color}`}}>
                       {item.color}
                       </span>
                       </div>
