@@ -2,7 +2,6 @@ import React from 'react'
 
 const FormInput = ( props ) => {
     const { label, status, errorMessage, onChange, id, ...inputProps } = props;
-    console.log('day la status cua project',status)
   return (
     <div>
     <div class="mb-3">

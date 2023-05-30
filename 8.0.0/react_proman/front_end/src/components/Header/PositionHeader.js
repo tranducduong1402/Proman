@@ -4,6 +4,7 @@ import Search from "../Search/Search";
 import FormInput from "../FormInput/FormInput";
 import { POSITION_CREATE_RESET } from "../../Redux/Constants/PositionContants";
 import { createPosition } from "../../Redux/Actions/PositionAction";
+import FormInputColor from "../FormInput/FormInputColor";
 
 const PositionHeader = ({ name }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,7 +53,6 @@ const PositionHeader = ({ name }) => {
       placeholder: "color",
       errorMessage: "Required!",
       label: "Color",
-      pattern: "^[A-Za-z0-9]{4,30}$",
       required: true,
     },
   ];
@@ -79,13 +79,13 @@ const PositionHeader = ({ name }) => {
         shortName: null,
         code: null,
         color: null,
-      })
+      });
     }
   }, [dispatch]);
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(createPosition(values));
-    setIsOpen(!isOpen)
+    setIsOpen(!isOpen);
   };
 
   return (
@@ -104,8 +104,7 @@ const PositionHeader = ({ name }) => {
           </button>
         </div>
       </div>
-      <div className=" flex justify-between mt-7">
-      </div>
+      <div className=" flex justify-between mt-7"></div>
       {isOpen && (
         <div
           className="fixed z-[999] inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81]"
@@ -122,7 +121,7 @@ const PositionHeader = ({ name }) => {
               </h2>
               <form onSubmit={submitHandler}>
                 <div className="flex justify-around">
-                  <div className=" w-[320px]">
+                  <div className=" w-[280px]">
                     <FormInput
                       key={inputs[0].id}
                       {...inputs[0]}
@@ -141,12 +140,15 @@ const PositionHeader = ({ name }) => {
                       value={values[inputs.name]}
                       onChange={handleChange}
                     />
-                    <FormInput
-                      key={inputs[3].id}
-                      {...inputs[3]}
-                      value={values[inputs.name]}
-                      onChange={handleChange}
-                    />
+                    <div className="flex">
+                      <FormInputColor
+                        key={inputs[3].id}
+                        {...inputs[3]}
+                        value={values[inputs.name]}
+                        onChange={handleChange}
+                        color = {values['color']}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className=" flex justify-end mr-5 mt-20">
@@ -156,7 +158,8 @@ const PositionHeader = ({ name }) => {
                   >
                     Cancel
                   </button>
-                  <button className="text-white bg-main_color px-5 py-2 rounded-lg  text-[15px] hover:opacity-90"
+                  <button
+                    className="text-white bg-main_color px-5 py-2 rounded-lg  text-[15px] hover:opacity-90"
                     type="submit"
                   >
                     Save
