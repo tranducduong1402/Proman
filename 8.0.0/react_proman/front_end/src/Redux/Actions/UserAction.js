@@ -127,6 +127,7 @@ export const createUser =
     type,
     password,
     emailAddress,
+    positionId
   }) =>
   async (dispatch, getState) => {
     try {
@@ -149,6 +150,7 @@ export const createUser =
           type,
           password,
           emailAddress,
+          positionId
         },
         config
       );

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createUser } from "../../Redux/Actions/UserAction";
 import { USER_CREATE_RESET } from "../../Redux/Constants/UserContants";
 import SelectFilter from "../SelectedMenu/SelectFilter";
+import { listPosition } from "../../Redux/Actions/PositionAction";
 
 const Header = ({ name, sendDataToParent }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,7 +25,7 @@ const Header = ({ name, sendDataToParent }) => {
       placeholder: "UserName",
       pattern: "^[A-Za-z0-9]{5,30}$",
       errorMessage: "Username must be length from 5 to 30 characters",
-      label: "userName",
+      label: "User Name",
       required: true,
     },
     {
@@ -68,7 +69,6 @@ const Header = ({ name, sendDataToParent }) => {
     },
   ];
   const filter = [
-  
     {
       name: "Type",
       title: "type",
@@ -129,27 +129,10 @@ const Header = ({ name, sendDataToParent }) => {
       name: "Clear",
       title: "Clear All",
       default: "All",
-      options: [
-        
-      ],
+      options: [],
     },
   ];
 
-  const SelectInput1 = {
-    name: "RoleNames",
-    title: "roleNames",
-    default: "Choose Value",
-    options: [
-      {
-        name: "Basic User",
-        value: "Basic User",
-      },
-      {
-        name: "Admin",
-        value: "Admin",
-      },
-    ],
-  };
 
   const SelectInput2 = [
     {
@@ -197,13 +180,13 @@ const Header = ({ name, sendDataToParent }) => {
     userName: null,
     name: null,
     surname: null,
-    roleNames: [],
     sex: null,
     type: null,
     password: null,
     emailAddress: null,
+    positionId: null
   });
-
+ console.log("day la values", values)
   const [valueFilter, setValueFilter] = useState({
     sex: null,
     isActive: null,
@@ -236,6 +219,14 @@ const Header = ({ name, sendDataToParent }) => {
   const adminCreate = useSelector((state) => state.adminCreate);
   const { loading, error, user } = adminCreate;
 
+  //get position
+  const positionList = useSelector((state) => state.positionList);
+  const {
+    error: errorPosition,
+    loading: loadingPosition,
+    positions,
+  } = positionList;
+
   useEffect(() => {
     if (user) {
       dispatch({ type: USER_CREATE_RESET });
@@ -243,13 +234,14 @@ const Header = ({ name, sendDataToParent }) => {
         userName: null,
         name: null,
         surname: null,
-        roleNames: [],
         sex: null,
         type: null,
         password: null,
         emailAddress: null,
+        positionId:null
       });
     }
+    dispatch(listPosition());
   }, [dispatch]);
   const submitHandler = (e) => {
     e.preventDefault();
@@ -257,6 +249,21 @@ const Header = ({ name, sendDataToParent }) => {
     setIsOpen(!isOpen);
   };
 
+  const list = positions?.map((position, index) => (
+ {
+  value: position.id,
+  name: position.name,
+ }
+  ))
+
+  const SelectInput1 = {
+    name: "Positions",
+    title: "positionId",
+    default: "Choose Value",
+    options: list,
+  };
+   console.log('day la list', list)
+  
   return (
     <div className=" mb-7 mx-5 mt-8">
       <div className="flex justify-between">
@@ -316,7 +323,8 @@ const Header = ({ name, sendDataToParent }) => {
                     />
                     <SelectMenu
                       props={SelectInput1}
-                      onChange={handleChangeRole}
+                      onChange={handleChange}
+                      value={values[SelectInput1.title]}
                     />
                     <FormInput
                       key={inputs[2].id}

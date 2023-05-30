@@ -5,6 +5,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../Redux/Actions/UserAction";
 import { toast } from "react-toastify";
+import LoadingPage from "../../components/Loading/LoadingPage";
 
 function LoginScreen() {
   const [userNameOrEmailAddress, setEmail] = useState("");
@@ -12,7 +13,6 @@ function LoginScreen() {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { error, loading, userInfo, status } = userLogin;
-  console.log(userLogin)
   let navigate = useNavigate();
   useEffect(() => {
     if (status) {
@@ -32,6 +32,8 @@ function LoginScreen() {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-tr from-blue-100 to-blue-400">
+    {loading ? <LoadingPage/> : (
+      <> 
       <div className="w-[380px] h-[28rem] p-10 shadow-lg bg-white rounded-lg">
         <div className="flex justify-center">
           <img src={logo} alt=" logo " className="w-[40px] h-[40px] mx-1 " />
@@ -97,6 +99,8 @@ function LoginScreen() {
           </Link>
         </div>
       </div>
+      </>)}
+      
    </div>
   );
 }

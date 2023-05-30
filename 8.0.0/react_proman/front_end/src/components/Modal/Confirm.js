@@ -32,13 +32,17 @@ const Confirm = ({ confirm, id, name }) => {
     if (name === "client") {
       dispatch(deleteClient(id))
     }
+    
   };
-
+  if(successDelete){
+    toast.success("delete success")
+  }
+  
   return (
     <div>
       {isOpen && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81]"
+          className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81] z-[400]"
           onClick={handleClose}
         >
           <div className="bg-[#FFFFFF] p-8 rounded-lg shadow-lg " ref={modalRef}>

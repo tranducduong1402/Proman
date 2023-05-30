@@ -7,7 +7,7 @@ import { editUser, updateUser } from "../../Redux/Actions/UserAction";
 import Loading from "../Loading/Loading";
 import axios from "axios";
 
-const Modal = ({ status, id, setStatus, setMenu,disable }) => {
+const Modal = ({ status, id, setStatus, setMenu, disable }) => {
   const [isOpen, setIsOpen] = useState(status);
   const modalRef = useRef(null);
   const handleClose = (event) => {
@@ -20,7 +20,7 @@ const Modal = ({ status, id, setStatus, setMenu,disable }) => {
     userName: null,
     name: null,
     surname: null,
-    roleNames: [],
+    positionId: '',
     sex: null,
     level: null,
     emailAddress: null,
@@ -66,21 +66,27 @@ const Modal = ({ status, id, setStatus, setMenu,disable }) => {
       label: "Full Name",
     },
   ];
+
+  //get position
+  const positionList = useSelector((state) => state.positionList);
+  const {
+    error: errorPosition,
+    loading: loadingPosition,
+    positions,
+  } = positionList;
+
+  const list = positions?.map((position, index) => ({
+    value: position.id,
+    name: position.name,
+  }));
+
   const SelectInput1 = {
-    name: "Role Names",
-    title: "roleNames",
+    name: "Positions",
+    title: "positionId",
     default: "Choose Value",
-    options: [
-      {
-        name: "Basic User",
-        value: "Basic User",
-      },
-      {
-        name: "Admin",
-        value: "Admin",
-      },
-    ],
+    options: list,
   };
+
   const SelectInput2 = [
     {
       name: "Gender",
@@ -122,13 +128,11 @@ const Modal = ({ status, id, setStatus, setMenu,disable }) => {
     },
   ];
 
-  
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
-    
   };
-  
-// call api get one user
+
+  // call api get one user
   const userInfo = localStorage.getItem("userInfo")
     ? JSON.parse(localStorage.getItem("userInfo"))
     : null;
@@ -147,7 +151,7 @@ const Modal = ({ status, id, setStatus, setMenu,disable }) => {
       userName: user.userName,
       name: user.name,
       surname: user.surname,
-      roleNames: user.roleNames,
+      positionId: user.positionId,
       sex: user.sex,
       type: user.type,
       emailAddress: user.emailAddress,
@@ -157,7 +161,6 @@ const Modal = ({ status, id, setStatus, setMenu,disable }) => {
   useEffect(() => {
     getOneUser(id);
   }, [id]);
-  
 
   const dispatch = useDispatch();
   const userUpdate = useSelector((state) => state.userUpdate);
@@ -167,6 +170,7 @@ const Modal = ({ status, id, setStatus, setMenu,disable }) => {
     error: errorUpdate,
     success: successUpdate,
   } = userUpdate;
+
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
@@ -176,12 +180,13 @@ const Modal = ({ status, id, setStatus, setMenu,disable }) => {
       })
     );
   };
-  
+  console.log("day la value edit user", values)
+
   return (
     <div>
       {isOpen && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81] z-[999]" 
+          className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-[0.81] z-[999]"
           onClick={handleClose}
         >
           <form onSubmit={submitHandler}>
@@ -203,28 +208,25 @@ const Modal = ({ status, id, setStatus, setMenu,disable }) => {
                           value={values[inputs[0].name]}
                           {...inputs[0]}
                           onChange={handleChange}
-                          status ={disable}
+                          status={disable}
                         />
                         <FormInput
                           value={values[inputs[1].name]}
                           {...inputs[1]}
                           onChange={handleChange}
-                          status ={disable}
-
+                          status={disable}
                         />
                         <SelectMenu
                           props={SelectInput1}
-                          value={values["roleNames"]}
+                          value={values["positionId"]}
                           onChange={handleChange}
-                          status ={disable}
-
+                          status={disable}
                         />
                         <FormInput
                           value={values[inputs[2].name]}
                           {...inputs[2]}
                           onChange={handleChange}
-                          status ={disable}
-
+                          status={disable}
                         />
                       </div>
                       <div className=" w-[320px]">
@@ -232,7 +234,7 @@ const Modal = ({ status, id, setStatus, setMenu,disable }) => {
                           value={values[inputs[3].name]}
                           {...inputs[3]}
                           onChange={handleChange}
-                          status ={disable}
+                          status={disable}
                         />
                         {SelectInput2.map((item) => (
                           <SelectMenu

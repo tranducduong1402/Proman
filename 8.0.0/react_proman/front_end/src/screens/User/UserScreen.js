@@ -28,9 +28,10 @@ const UserScreen = () => {
   const userList = useSelector((state) => state.userList);
   const { loading, error, users } = userList;
 
+  //delete User
   const userDelete = useSelector((state) => state.userDelete);
   const { error: errorDelete, success: successDelete } = userDelete;
-
+  // update 
   const userUpdate = useSelector((state) => state.userUpdate);
 
   const {
