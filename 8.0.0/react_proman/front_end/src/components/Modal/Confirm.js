@@ -5,6 +5,7 @@ import { deletePosition } from '../../Redux/Actions/PositionAction';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteClient } from '../../Redux/Actions/ClientAction';
+import { deleteProject } from '../../Redux/Actions/ProjectAction';
 
 const Confirm = ({ confirm, id, name }) => {
   const [isOpen, setIsOpen] = useState(confirm);
@@ -32,11 +33,11 @@ const Confirm = ({ confirm, id, name }) => {
     if (name === "client") {
       dispatch(deleteClient(id))
     }
-    
+    if(name === 'project'){
+      dispatch(deleteProject(id))
+    }
   };
-  if(successDelete){
-    toast.success("delete success")
-  }
+ 
   
   return (
     <div>

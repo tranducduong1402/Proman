@@ -60,7 +60,7 @@ export const deleteProject = (id) => async (dispatch, getState) => {
       },
     };
 
-    await axios.delete(`https://localhost:44311/api/services/app/User/Delete?Id=${id}`, config);
+    await axios.delete(`https://localhost:44311/api/services/app/Project/Delete?Id=${id}`, config);
 
     dispatch({ type: PROJECT_DELETE_SUCCESS });
   } catch (error) {
