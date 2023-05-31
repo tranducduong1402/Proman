@@ -14,6 +14,7 @@ import ProjectHeader from "../../components/Header/HeaderProject";
 import { useParams } from "react-router-dom";
 import avatar from "../../data/image/avatar.jpg";
 import DropDownAddNewMember from "../../components/Dropdown/DropDownAddNewMember";
+import DropMenuProject from "../../components/Dropdown/DropDownProject";
 
 const Project = () => {
   const data = [
@@ -51,9 +52,14 @@ const Project = () => {
   const { error, loading, projects } = projectList;
   const keyword = useParams().keyword;
 
+  const projectCreate = useSelector((state) => state.projectCreate);
+  const { error: errorCreate, success: successCreate } = projectCreate;
+  //delete Project
+  const projectDelete = useSelector((state) => state.projectDelete);
+  const { error: errorDelete, success: successDelete } = projectDelete;
   useEffect(() => {
     dispatch(listProject(keyword));
-  }, [dispatch, keyword]);
+  }, [dispatch, keyword, successCreate, successDelete]);
 
   const options = ["View", "Edit", "Delete"];
   return (
@@ -148,7 +154,7 @@ const Project = () => {
                             className="bg-main_color text-white ml-3 w-5 text-center h-5 mt-3 cursor-pointer"
                             onClick={() => setOpenAddMember(!isOpenAddMember)}
                           >
-                            <DropDownAddNewMember/>
+                            <DropDownAddNewMember />
                           </div>
                           <div className="bg-red-500 text-white w-5 text-center h-5 mt-3 cursor-pointer">
                             <i class="fa-sharp fa-solid fa-xmark"></i>
@@ -174,7 +180,7 @@ const Project = () => {
                       </td>
 
                       <td className="px-10 py-8">
-                        <DropMenu
+                        <DropMenuProject
                           options={options}
                           id={item.id}
                           name={"project"}
